@@ -1,9 +1,13 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 html,
 body {
   padding: 0;
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
-    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans,
+    Helvetica Neue, sans-serif;
 }
 
 a {
@@ -13,4 +17,40 @@ a {
 
 * {
   box-sizing: border-box;
+}
+
+@layer base {
+  h1 {
+    @apply text-5xl font-bold;
+  }
+
+  h5 {
+    @apply font-bold;
+  }
+}
+
+@layer components {
+  .card {
+    @apply border-2 border-gray-300 shadow-lg shadow-gray-300 p-5 rounded-md;
+  }
+
+  .header {
+    @apply text-center;
+  }
+
+  .form-control {
+    @apply shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight outline-blue-700 focus:outline-blue-300 focus:ease-in-out focus:duration-300 caret-pink-500;
+  }
+
+  .btn-primary {
+    @apply p-3 font-bold text-white bg-blue-400 ease-in-out duration-200 hover:bg-blue-500 rounded-md;
+  }
+}
+
+@layer utilities {
+  input[type="number"]::-webkit-inner-spin-button,
+  input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
 }
