@@ -1,5 +1,6 @@
 import { faPencilAlt } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useRouter } from "next/router";
 import { SyntheticEvent, useState } from "react";
 import Swal from "sweetalert2";
 
@@ -13,11 +14,19 @@ async function createUser(fullName: string, email: string, password: string) {
     });
 
     const data = await response.json();
+    return data;
+}
 
-    if (!response.ok) {
-        throw new Error(data.message || 'Something went wrong!');
-    }
+async function createUserProfileBlank(_id: string) {
+    const response = await fetch('/api/userProfileAPI', {
+        method: 'POST',
+        body: JSON.stringify({ _id }),
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    });
 
+    const data = await response.json();
     return data;
 }
 
@@ -25,19 +34,33 @@ function Register() {
     const [fullName, setFullName] = useState<string>('');
     const [email, setEmail] = useState<string>('');
     const [password, setPassword] = useState<string>('');
+    const router = useRouter();
 
     const handleOnSubmitRegisterForm = async (event: SyntheticEvent) => {
         event.preventDefault();
 
-        const response = await createUser(fullName, email, password);
-        console.log(response);
-        Swal.fire({
-            position: 'center',
-            icon: 'success',
-            title: 'Account Created Successfully!',
-            showConfirmButton: false,
-            timer: 800
-        });
+        const response = await createUser(fullName, email, password);        
+        if (response.isOk) {            
+            const { _id } = response._doc;
+            const responseUserProfile = await createUserProfileBlank(_id);
+
+            Swal.fire({
+                position: 'center',
+                icon: 'success',
+                title: 'Account Created Successfully!',
+                showConfirmButton: true,
+            }).then(() => {
+                router.push('/login');
+            });
+        } else {
+            Swal.fire({
+                position: 'center',
+                icon: 'warning',
+                title: `${response.message}`,
+                showConfirmButton: false,
+                timer: 800
+            });
+        }
     }
 
     return (
