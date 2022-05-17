@@ -27,12 +27,19 @@ function NavigationBar() {
             </div>
             <div className="w-full block flex-grow lg:flex lg:items-center lg:w-auto">
                 <div className="text-lg lg:flex-grow">
-                    <div className="p-1 w-fit m-auto">
+                    <div className="p-1 w-fit m-auto flex flex-row gap-5 items-center">
                         {
                             !session && (
                                 <div>
                                     <Link href={'/register'}> Register</Link>
                                     <Link href={'/login'}> Login</Link>
+                                </div>
+                            )
+                        }
+                        {
+                            session && (
+                                <div>
+                                    <Link href={'/dashboard'}>Dashboard</Link>
                                 </div>
                             )
                         }
@@ -69,7 +76,7 @@ function NavigationBar() {
                         <Menu.Item>
                             {({ active }) => (
                                 <a
-                                    href="#"
+                                    href={`/seeUserProfile/${session?.user?.email}`}
                                     className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700')}
                                 >
                                     Your Profile
