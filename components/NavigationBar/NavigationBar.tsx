@@ -1,4 +1,4 @@
-import { faDoorOpen } from "@fortawesome/free-solid-svg-icons";
+import { faAddressCard, faDoorOpen, faGears, faRightFromBracket } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Menu, Transition } from "@headlessui/react";
 import { signOut, useSession } from "next-auth/react";
@@ -56,11 +56,13 @@ function NavigationBar() {
                 <div>
                     <Menu.Button className="bg-gray-800 flex text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">
                         <span className="sr-only">Open user menu</span>
-                        <img
-                            className="h-8 w-8 rounded-full"
-                            src=""
-                            alt=""
-                        />
+                        {session && (
+                            <img
+                                className="h-14 w-14 rounded-full"
+                                src={`${session?.user?.image}`}
+                                alt="ProfileImage"
+                            />
+                        )}
                     </Menu.Button>
                 </div>
                 <Transition
@@ -77,9 +79,9 @@ function NavigationBar() {
                             {({ active }) => (
                                 <a
                                     href={`/seeUserProfile/${session?.user?.email}`}
-                                    className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700')}
+                                    className={classNames(active ? 'bg-gray-200' : '', 'block px-4 py-2')}
                                 >
-                                    Your Profile
+                                    <h5 className="text-black"><FontAwesomeIcon icon={faAddressCard} /> Your Profile</h5>
                                 </a>
                             )}
                         </Menu.Item>
@@ -87,9 +89,9 @@ function NavigationBar() {
                             {({ active }) => (
                                 <a
                                     href="/settings"
-                                    className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700')}
+                                    className={classNames(active ? 'bg-gray-200' : '', 'block px-4 py-2')}
                                 >
-                                    Settings
+                                    <h5 className="text-black"><FontAwesomeIcon icon={faGears} /> Settings</h5>
                                 </a>
                             )}
                         </Menu.Item>
@@ -97,9 +99,9 @@ function NavigationBar() {
                             {({ active }) => (
                                 <a
                                     href="#"
-                                    className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700')}
+                                    className={classNames(active ? 'bg-gray-200' : '', 'block px-4 py-2')}
                                 >
-                                    Sign out
+                                    <h5 className="text-black"><FontAwesomeIcon icon={faRightFromBracket} /> Sign Out</h5>
                                 </a>
                             )}
                         </Menu.Item>

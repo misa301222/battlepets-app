@@ -9,6 +9,7 @@ import PetCardFull from "../Cards/PetCardFull";
 
 
 interface Pet {
+    _id: string,
     userId: string,
     currentHealthPoints?: number,
     maxHealthPoints?: number,
@@ -79,15 +80,29 @@ function Dashboard({ data }: any) {
             </div>
 
             <div>
-                <Modal className="text-black bg-white max-w-[60rem]" open={isOpen} onClickBackdrop={() => setIsOpen(false)}>
+                <Modal className="text-black bg-white max-w-[60rem] max-h-full" open={isOpen} onClickBackdrop={() => setIsOpen(false)}>
                     <Modal.Header><h5>Pet Info <FontAwesomeIcon icon={faShieldCat} /> </h5></Modal.Header>
 
                     <Modal.Body>
                         <div className="p-2">
                             {selectedPet ?
-                                <PetCardFull pet={selectedPet} />
+                                <div className="flex flex-row">
+                                    <div>
+                                        <PetCardFull pet={selectedPet} />
+                                    </div>
+                                    <div>
+                                        <div className="p-5 h-1/2">
+                                            Content
+                                        </div>
+
+                                        <div className="p-5 h-1/2">
+                                            <button onClick={() => router.push(`/viewPet/${selectedPet._id}`)} type="button" className="btn-primary">Go to Pet Page!</button>
+                                        </div>
+                                    </div>
+                                </div>
                                 : null
                             }
+
                         </div>
                     </Modal.Body>
 

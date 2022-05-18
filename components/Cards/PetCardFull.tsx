@@ -28,7 +28,7 @@ function PetCardFull({ pet }: any) {
     }, [pet])
 
     return (
-        <div className="card w-[50rem] mx-auto">
+        <div className="card w-[25rem]">
             <div style={{
                 backgroundImage: `url(${petType?.imageURL})`,
                 height: '10rem',
@@ -43,7 +43,7 @@ function PetCardFull({ pet }: any) {
 
             <h4 className="text-center mt-5 mb-2">{pet.name}</h4>
             <hr />
-            <div>
+            <div className="mb-4">
                 <div className="columns-2">
                     <h5 className="text-right">HP:</h5>
                     <h5 style={{ color: `${pet.currentHealthPoints <= pet.maxHealthPoints / 2 ? 'yellow' : 'black'}` }}>{pet.currentHealthPoints} / {pet.maxHealthPoints}</h5>

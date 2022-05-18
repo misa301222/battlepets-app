@@ -58,10 +58,12 @@ export default NextAuth({
                 const { role } = user;
                 const { email } = user;
                 const { fullName } = user;
+                const { imageURL } = user;
 
                 token.email = email;
                 token.role = role;
                 token.fullName = fullName;
+                token.image = imageURL;
             }
             return token;
         },
@@ -70,6 +72,7 @@ export default NextAuth({
                 session.id = token.id;
                 session.user.role = token.role;
                 session.user.fullName = token.fullName;
+                session.user.image = token.image;
             }
 
             return session;
