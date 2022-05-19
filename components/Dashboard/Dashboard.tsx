@@ -26,7 +26,8 @@ interface Pet {
     wins?: number,
     defeats?: number,
     draws?: number,
-    petType: string
+    petType: string,
+    position: number
 }
 
 function Dashboard({ data }: any) {

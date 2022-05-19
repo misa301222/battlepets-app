@@ -28,7 +28,8 @@ interface Pet {
     wins?: number,
     defeats?: number,
     draws?: number,
-    petType: string
+    petType: string,
+    position: number
 }
 
 interface User {
@@ -38,6 +39,18 @@ interface User {
     imageURL: string,
     role: string,
     privateInfo: boolean
+}
+
+async function getPetsByEmail(email: string) {
+    const response = await fetch(`/api/petAPI/${email}`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    });
+
+    const data = await response.json();
+    return data;
 }
 
 async function createNewPet(userId: string, petName: string, petType: string) {
@@ -56,7 +69,7 @@ async function createNewPet(userId: string, petName: string, petType: string) {
 function CreatePet({ data }: any) {
     const [petTypes, setPetTypes] = useState<PetType[]>(data.petTypes as PetType[]);
     const [selectedPetType, setSelectedPetType] = useState<PetType | null>(null);
-    const [petName, setPetName] = useState<string>('');    
+    const [petName, setPetName] = useState<string>('');
     const [currentUser] = useState<User>(data.currentUser as User);
     const router = useRouter();
 
@@ -72,10 +85,13 @@ function CreatePet({ data }: any) {
         event.preventDefault();
 
         if (selectedPetType && petName) {
+            const responsePets = await getPetsByEmail(currentUser.email);
+
             let newPet: Pet = {
                 userId: currentUser._id,
                 name: petName,
-                petType: selectedPetType._id
+                petType: selectedPetType._id,
+                position: responsePets.length
             }
 
             const responsePet = await createNewPet(newPet.userId, newPet.name, newPet.petType);

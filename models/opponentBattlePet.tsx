@@ -1,9 +1,6 @@
 import mongoose from "mongoose";
 
-const petSchema = new mongoose.Schema({
-    userId: {
-        type: mongoose.Schema.Types.ObjectId, ref: 'users'
-    },
+const opponentBattlePetSchema = new mongoose.Schema({
     currentHealthPoints: {
         type: Number,
         default: 11
@@ -14,7 +11,7 @@ const petSchema = new mongoose.Schema({
     },
     name: {
         type: String,
-        default: 'Name Your Pet'
+        default: 'Opponent'
     },
     attackPoints: {
         type: Number,
@@ -38,7 +35,7 @@ const petSchema = new mongoose.Schema({
     },
     availableAttacks: {
         type: [String],
-        default: ['Attack', 'Defense', 'Heal', 'Skip']
+        default: ['Attack', 'Defense', 'Heal']
     },
     level: {
         type: Number,
@@ -52,25 +49,10 @@ const petSchema = new mongoose.Schema({
         type: String,
         default: ''
     },
-    wins: {
-        type: Number,
-        default: 0
-    },
-    defeats: {
-        type: Number,
-        default: 0
-    },
-    draws: {
-        type: Number,
-        default: 0
-    },
     petType: {
         type: mongoose.Schema.Types.ObjectId, ref: 'pettypes'
-    },
-    position: {
-        type: Number
     }
 }, { timestamps: true });
 
-let Pet = mongoose.models.pets || mongoose.model('pets', petSchema);
-export default Pet;
+let OpponentBattlePet = mongoose.models.opponentbattlepets || mongoose.model('opponentbattlepets', opponentBattlePetSchema);
+export default OpponentBattlePet;

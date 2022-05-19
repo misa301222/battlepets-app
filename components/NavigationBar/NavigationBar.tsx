@@ -1,4 +1,4 @@
-import { faAddressCard, faDoorOpen, faGears, faRightFromBracket } from "@fortawesome/free-solid-svg-icons";
+import { faAddressCard, faDoorOpen, faGears, faRightFromBracket, faStar, faUserNinja } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Menu, Transition } from "@headlessui/react";
 import { signOut, useSession } from "next-auth/react";
@@ -39,7 +39,14 @@ function NavigationBar() {
                         {
                             session && (
                                 <div>
-                                    <Link href={'/dashboard'}>Dashboard</Link>
+                                    <Link href={'/dashboard'}><h5 className="cursor-pointer"><FontAwesomeIcon icon={faStar}/> Dashboard</h5></Link>
+                                </div>
+                            )
+                        }
+                        {
+                            session && (
+                                <div>
+                                    <Link href={'/battle/start'}><h5 className="cursor-pointer"><FontAwesomeIcon icon={faUserNinja} /> Battle</h5></Link>
                                 </div>
                             )
                         }
@@ -101,7 +108,7 @@ function NavigationBar() {
                                     href="#"
                                     className={classNames(active ? 'bg-gray-200' : '', 'block px-4 py-2')}
                                 >
-                                    <h5 className="text-black"><FontAwesomeIcon icon={faRightFromBracket} /> Sign Out</h5>
+                                    <h5 onClick={handleOnClickLogout} className="text-black" ><FontAwesomeIcon icon={faRightFromBracket} /> Sign Out</h5>
                                 </a>
                             )}
                         </Menu.Item>

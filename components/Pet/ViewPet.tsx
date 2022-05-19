@@ -21,7 +21,8 @@ interface Pet {
     wins?: number,
     defeats?: number,
     draws?: number,
-    petType: string
+    petType: string,
+    position: number
 }
 
 interface PetType {
