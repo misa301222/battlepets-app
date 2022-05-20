@@ -18,7 +18,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
         const ObjectId = require('mongodb').ObjectID;
         let pets = await Pet.find({
             userId: ObjectId(user._id)
-        });
+        }).sort({position: 'asc'});
 
         res.status(201).json(pets)
     }

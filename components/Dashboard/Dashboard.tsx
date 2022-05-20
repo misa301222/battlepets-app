@@ -27,7 +27,8 @@ interface Pet {
     defeats?: number,
     draws?: number,
     petType: string,
-    position: number
+    position: number,
+    experience: number
 }
 
 function Dashboard({ data }: any) {
@@ -66,15 +67,20 @@ function Dashboard({ data }: any) {
                 <div className="flex flex-wrap gap-10 mt-10">
                     {
                         pets.map((element: Pet, index: number) => (
-                            <motion.div
-                                whileHover={{
-                                    scale: 1.1
-                                }}
-                                className='cursor-pointer'
-                                key={index}
-                                onClick={() => handleOnClickOpenModal(element)}>
-                                <PetCard pet={element} />
-                            </motion.div>
+                            <div key={index}>
+                                <div className="">
+                                    <h4 className="text-center mb-5"># {element.position}</h4>
+                                </div>
+                                <motion.div
+                                    whileHover={{
+                                        scale: 1.1
+                                    }}
+                                    className='cursor-pointer'
+
+                                    onClick={() => handleOnClickOpenModal(element)}>
+                                    <PetCard pet={element} />
+                                </motion.div>
+                            </div>
                         ))
                     }
                 </div>

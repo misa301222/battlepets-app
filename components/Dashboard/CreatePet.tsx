@@ -29,7 +29,8 @@ interface Pet {
     defeats?: number,
     draws?: number,
     petType: string,
-    position: number
+    position: number,
+    experience?: number
 }
 
 interface User {

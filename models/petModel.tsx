@@ -69,6 +69,10 @@ const petSchema = new mongoose.Schema({
     },
     position: {
         type: Number
+    },
+    experience: {
+        type: Number,
+        default: 0
     }
 }, { timestamps: true });
 
