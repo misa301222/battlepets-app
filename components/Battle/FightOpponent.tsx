@@ -30,13 +30,40 @@ interface Pet {
     draws?: number,
     petType: string,
     position: number,
-    experience: number
+    experience: number,
+    experienceGranted?: number
 }
 
 interface BattleLog {
     id: number,
     firstMessage: string,
     secondMessage: string
+}
+
+async function updateHealthAndMagicPoints(id: string, currentHealthPoints: number, currentMagicPoints: number) {
+    const response = await fetch(`/api/petAPI/updateHealthAndMagicPoints`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ id, currentHealthPoints, currentMagicPoints })
+    });
+
+    const data = await response.json();
+    return data;
+}
+
+async function updateExperienceAndLevel(id: string, experience: number) {
+    const response = await fetch(`/api/petAPI/updateExperienceAndLevel`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ id, experience })
+    });
+
+    const data = await response.json();
+    return data;
 }
 
 function FightOpponent({ data }: any) {
@@ -57,7 +84,7 @@ function FightOpponent({ data }: any) {
         closed: { opacity: 0, translateX: 0 },
     }
 
-    const handleOnClickAction = (action: string) => {
+    const handleOnClickAction = async (action: string) => {
         const multiplier: number = 0.3;
         const battleLogIndex: number = battleLog.length;
 
@@ -104,7 +131,7 @@ function FightOpponent({ data }: any) {
         opponentAction(newMessage);
     }
 
-    const opponentAction = (newMessage: BattleLog) => {
+    const opponentAction = async (newMessage: BattleLog) => {
         let maxNumber: number = 2;
         const multiplier: number = 0.3;
 
@@ -119,7 +146,7 @@ function FightOpponent({ data }: any) {
             maxNumber = 3;
         }
         let actionRandom: number = Math.floor(Math.random() * (maxNumber)) + 1;
-        actionRandom = 1;
+        actionRandom = 2;
         let message: string = `${newOpponentPet.name} used `;
 
         switch (hashActions.get(actionRandom)) {
@@ -150,11 +177,15 @@ function FightOpponent({ data }: any) {
         }
         newMessage.secondMessage = message;
         setBattleLog(prev => [...prev, newMessage]);
+        await updateHealthAndMagicPoints(newUserPet._id, newUserPet.currentHealthPoints!, newUserPet.currentMagicPoints!);
 
         if (newOpponentPet.currentHealthPoints! <= 0 || userPet.currentHealthPoints! <= 0) {
             setIsBattleFinished(true);
             if (newOpponentPet.currentHealthPoints! <= 0 && userPet.currentHealthPoints! > 0) {
                 setWinner(userPet._id);
+                //500 EXPERIENCE GRANTED
+                let experienceGranted: number = newOpponentPet.experienceGranted!;
+                await updateExperienceAndLevel(userPet._id, experienceGranted);
             }
 
             if (newOpponentPet.currentHealthPoints! > 0 && userPet.currentHealthPoints! <= 0) {
@@ -235,11 +266,20 @@ function FightOpponent({ data }: any) {
                 <div className="flex flex-row justify-evenly">
                     {
                         userPet.availableAttacks?.map((element: string, index: number) => (
-                            <button disabled={isBattleFinished || (element === 'Heal' && userPet.currentMagicPoints! < 1)} onClick={() => handleOnClickAction(element)} key={index} type="button" className="btn-action w-36">{element}</button>
+                            <button disabled={isBattleFinished || (element === 'Heal' && userPet.currentMagicPoints! < 1)} onClick={async () => handleOnClickAction(element)} key={index} type="button" className="btn-action w-36">{element}</button>
                         ))
                     }
                 </div>
             </div>
+
+            {
+                winner === userPet._id ?
+                    <div className="w-1/2 mx-auto mt-10 flex flex-row">
+                        You Win {opponentPet.experienceGranted} experience
+
+                    </div>
+                    : null
+            }
 
             <div className="w-1/2 mx-auto mt-10">
                 <div className="bg-indigo-300 rounded-md shadow-black shadow-md p-5 max-h-[30rem] overflow-y-auto">

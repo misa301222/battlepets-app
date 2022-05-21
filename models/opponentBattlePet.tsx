@@ -51,6 +51,10 @@ const opponentBattlePetSchema = new mongoose.Schema({
     },
     petType: {
         type: mongoose.Schema.Types.ObjectId, ref: 'pettypes'
+    },
+    experienceGranted: {
+        type: Number,
+        default: 0
     }
 }, { timestamps: true });
 
