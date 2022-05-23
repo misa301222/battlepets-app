@@ -1,11 +1,13 @@
 import { faHeartPulse, faHippo, faPaw, faRadiationAlt, faShieldCat } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import PetCard from "../Cards/PetCard";
 import { motion } from 'framer-motion';
 import { Button, Modal } from 'react-daisyui'
 import PetCardFull from "../Cards/PetCardFull";
+import { useSession } from "next-auth/react";
+import Swal from "sweetalert2";
 
 
 interface Pet {
@@ -31,9 +33,22 @@ interface Pet {
     experience: number
 }
 
+async function healAllPets(email: string) {
+    const response = await fetch(`/api/petAPI/healAllPets/${email}`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    });
+
+    const data = await response.json();
+    return data;
+}
+
 function Dashboard({ data }: any) {
+    const { data: session, status } = useSession();
     const router = useRouter();
-    const [pets] = useState<Pet[]>(data.pets as Pet[]);
+    const [pets, setPets] = useState<Pet[]>(data.pets as Pet[]);
     const [isOpen, setIsOpen] = useState<boolean>(false)
     const [selectedPet, setSelectedPet] = useState<Pet>();
 
@@ -41,6 +56,23 @@ function Dashboard({ data }: any) {
         console.log(element);
         setSelectedPet(element);
         setIsOpen(true);
+    }
+
+    const handleOnClickHeallAllPets = async () => {
+        const currentUser = session?.user?.email;
+        if (currentUser) {
+            const responsePets = await healAllPets(currentUser);
+            Swal.fire({
+                position: 'center',
+                icon: 'success',
+                title: 'Pets Healed!',
+                showConfirmButton: false,
+                timer: 800
+            }).then(async () => {
+                console.log(responsePets);
+                setPets(responsePets);
+            });
+        }
     }
 
     return (
@@ -64,6 +96,9 @@ function Dashboard({ data }: any) {
             <div className="w-10/12 mx-auto p-10 shadow-lg shadow-black">
                 <h2 className="text-center">Your Pets <FontAwesomeIcon icon={faPaw} /> </h2>
                 <hr />
+                <div className="flex flex-row justify-end">
+                    <button onClick={async () => handleOnClickHeallAllPets()} className="btn-dark" type="button"><FontAwesomeIcon icon={faHeartPulse} className='text-red-400' /> Heal All Pets</button>
+                </div>
                 <div className="flex flex-wrap gap-10 mt-10">
                     {
                         pets.map((element: Pet, index: number) => (

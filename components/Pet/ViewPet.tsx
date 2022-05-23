@@ -60,12 +60,12 @@ function ViewPet({ data }: any) {
                     <div className="w-1/2 mx-auto mt-10">
                         <div className="columns-2">
                             <h5 className="text-right underline">HP:</h5>
-                            <h5 style={{ color: `${pet.currentHealthPoints! <= pet.maxHealthPoints! / 2 ? 'yellow' : 'black'}` }}>{pet.currentHealthPoints} / {pet.maxHealthPoints}</h5>
+                            <h5 style={{ color: `${pet.currentHealthPoints! <= pet.maxHealthPoints! / 4 ? 'red' : `${pet.currentHealthPoints! <= pet.maxHealthPoints! / 2 ? '#f59e0b' : 'black'}`}` }}>{pet.currentHealthPoints!.toFixed(2)} / {pet.maxHealthPoints!.toFixed(2)}</h5>
                         </div>
 
                         <div className="columns-2">
                             <h5 className="text-right underline">MP:</h5>
-                            <h5 style={{ color: `${pet.currentMagicPoints! <= pet.maxMagicPoints! / 2 ? 'yellow' : 'black'}` }}>{pet.currentMagicPoints} / {pet.maxMagicPoints}</h5>
+                            <h5 style={{ color: `${pet.currentMagicPoints! <= pet.maxMagicPoints! / 4 ? 'red' : `${pet.currentMagicPoints! <= pet.maxMagicPoints! / 2 ? '#f59e0b' : 'black'}`}` }}>{pet.currentMagicPoints!.toFixed(2)} / {pet.maxMagicPoints!.toFixed(2)}</h5>
                         </div>
 
                         <div className="columns-2">
@@ -86,6 +86,11 @@ function ViewPet({ data }: any) {
                         <div className="columns-2">
                             <h5 className="text-right underline">Level:</h5>
                             <h5>{pet.level}</h5>
+                        </div>
+
+                        <div className="columns-2">
+                            <h5 className="text-right underline">Experience:</h5>
+                            <h5>{pet.experience}</h5>
                         </div>
                     </div>
 

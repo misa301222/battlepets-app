@@ -53,13 +53,13 @@ async function updateHealthAndMagicPoints(id: string, currentHealthPoints: numbe
     return data;
 }
 
-async function updateExperienceAndLevel(id: string, experience: number) {
+async function updateExperienceAndLevel(id: string, experience: number, outcome: string) {
     const response = await fetch(`/api/petAPI/updateExperienceAndLevel`, {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ id, experience })
+        body: JSON.stringify({ id, experience, outcome })
     });
 
     const data = await response.json();
@@ -85,7 +85,7 @@ function FightOpponent({ data }: any) {
     }
 
     const handleOnClickAction = async (action: string) => {
-        const multiplier: number = 0.3;
+        const multiplier: number = userPet.attackPoints! / 10 / 4;
         const battleLogIndex: number = battleLog.length;
 
         const newOpponentPet: Pet = opponentPet;
@@ -182,14 +182,19 @@ function FightOpponent({ data }: any) {
         if (newOpponentPet.currentHealthPoints! <= 0 || userPet.currentHealthPoints! <= 0) {
             setIsBattleFinished(true);
             if (newOpponentPet.currentHealthPoints! <= 0 && userPet.currentHealthPoints! > 0) {
+                const outcome: string = 'WIN';
                 setWinner(userPet._id);
                 //500 EXPERIENCE GRANTED
                 let experienceGranted: number = newOpponentPet.experienceGranted!;
-                await updateExperienceAndLevel(userPet._id, experienceGranted);
+                await updateExperienceAndLevel(userPet._id, experienceGranted, outcome);
             }
 
             if (newOpponentPet.currentHealthPoints! > 0 && userPet.currentHealthPoints! <= 0) {
+                const outcome: string = 'DEFEAT';
                 setWinner(opponentPet._id);
+
+                let experienceGranted: number = 0;
+                await updateExperienceAndLevel(userPet._id, experienceGranted, outcome);
             }
 
             if (newOpponentPet.currentHealthPoints! <= 0 && userPet.currentHealthPoints! <= 0) {
