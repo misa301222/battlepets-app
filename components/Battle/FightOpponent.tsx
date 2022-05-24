@@ -1,8 +1,10 @@
-import { faUserNinja } from "@fortawesome/free-solid-svg-icons";
+import { faArrowLeft, faBook, faUserNinja } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useEffect, useState } from "react";
 import { motion } from 'framer-motion';
 import PetCardBattle from "../Cards/PetCardBattle";
+import PetCardFull from "../Cards/PetCardFull";
+import { useRouter } from "next/router";
 
 interface PetType {
     _id: string,
@@ -68,11 +70,13 @@ async function updateExperienceAndLevel(id: string, experience: number, outcome:
 
 function FightOpponent({ data }: any) {
     const [userPet, setUserPet] = useState<Pet>(data.petPositionOne as Pet);
+    const [updatedPet, setUpdatedPet] = useState<Pet | null>(null);
     const [opponentPet, setOpponentPet] = useState<Pet>(data.opponentBattlePet as Pet);
     const [winner, setWinner] = useState<string>('');
     const [isDraw, setIsDraw] = useState<boolean>(false);
     const [isBattleFinished, setIsBattleFinished] = useState<boolean>(false);
     const [battleLog, setBattleLog] = useState<BattleLog[]>([]);
+    const router = useRouter();
 
     const variants = {
         open: { opacity: 1, translateX: -50, rotate: 45 },
@@ -186,7 +190,9 @@ function FightOpponent({ data }: any) {
                 setWinner(userPet._id);
                 //500 EXPERIENCE GRANTED
                 let experienceGranted: number = newOpponentPet.experienceGranted!;
-                await updateExperienceAndLevel(userPet._id, experienceGranted, outcome);
+                //experienceGranted = 50000;
+                const responseExperience = await updateExperienceAndLevel(userPet._id, experienceGranted, outcome);
+                setUpdatedPet(responseExperience);
             }
 
             if (newOpponentPet.currentHealthPoints! > 0 && userPet.currentHealthPoints! <= 0) {
@@ -265,28 +271,62 @@ function FightOpponent({ data }: any) {
                 </div>
             </div>
 
-            <div className="bg-slate-200 p-5 rounded-md shadow-black shadow-md w-3/5 mx-auto mt-20">
-                <h4 className="text-center">Actions</h4>
-                <hr className="border-black mb-5 w-1/2 mx-auto" />
-                <div className="flex flex-row justify-evenly">
-                    {
-                        userPet.availableAttacks?.map((element: string, index: number) => (
-                            <button disabled={isBattleFinished || (element === 'Heal' && userPet.currentMagicPoints! < 1)} onClick={async () => handleOnClickAction(element)} key={index} type="button" className="btn-action w-36">{element}</button>
-                        ))
-                    }
-                </div>
-            </div>
-
             {
                 winner === userPet._id ?
-                    <div className="w-1/2 mx-auto mt-10 flex flex-row">
-                        You Win {opponentPet.experienceGranted} experience
+                    <div>
+                        <div className="w-1/2 mx-auto mt-20 flex flex-row justify-center">
+                            <motion.h2
+                                initial={{
+                                    opacity: 0,
+                                }}
+                                animate={{
+                                    opacity: 1,
+                                }}
+                                className="">You Win {opponentPet.experienceGranted} experience!</motion.h2>
+                        </div>
 
+                        {
+                            updatedPet ?
+                                <motion.div
+                                    initial={{
+                                        opacity: 0,
+                                        translateX: -200
+                                    }}
+                                    animate={{
+                                        opacity: 1,
+                                        translateX: 0
+                                    }}
+                                    className="flex mt-10 flex-row mx-auto justify-center w-1/2">
+                                    <PetCardFull pet={updatedPet} />
+                                </motion.div>
+                                : null
+                        }
                     </div>
                     : null
             }
 
+            {
+                !isBattleFinished ?
+                    < div className="bg-slate-200 p-5 rounded-md shadow-black shadow-md w-3/5 mx-auto mt-20">
+                        <h4 className="text-center">Actions</h4>
+                        <hr className="border-black mb-5 w-1/2 mx-auto" />
+                        <div className="flex flex-row justify-evenly">
+                            {
+                                userPet.availableAttacks?.map((element: string, index: number) => (
+                                    <button disabled={isBattleFinished || (element === 'Heal' && userPet.currentMagicPoints! < 1)} onClick={async () => handleOnClickAction(element)} key={index} type="button" className="btn-action w-36">{element}</button>
+                                ))
+                            }
+                        </div>
+                    </div>
+                    :
+                    <div className="flex flex-row justify-center mt-10">
+                        <button onClick={() => router.push('/dashboard')} className="btn-dark" type="button"><FontAwesomeIcon icon={faArrowLeft} /> Go Back</button>
+                    </div>
+            }
+
             <div className="w-1/2 mx-auto mt-10">
+                <h3 className="text-center mb-2"><FontAwesomeIcon icon={faBook} /> Combat Log</h3>
+                <hr className="mb-4" />
                 <div className="bg-indigo-300 rounded-md shadow-black shadow-md p-5 max-h-[30rem] overflow-y-auto">
                     {
                         battleLog.slice(0).reverse().map((element: BattleLog, index: number) => (
@@ -299,7 +339,7 @@ function FightOpponent({ data }: any) {
                     }
                 </div>
             </div>
-        </div>
+        </div >
     )
 }
 

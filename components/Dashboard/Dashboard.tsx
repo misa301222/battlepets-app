@@ -45,6 +45,19 @@ async function healAllPets(email: string) {
     return data;
 }
 
+async function setActivePet(id: string, email: string) {
+    const response = await fetch(`/api/petAPI/setActivePet/`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: (JSON.stringify({ id, email }))
+    });
+
+    const data = await response.json();
+    return data;
+}
+
 function Dashboard({ data }: any) {
     const { data: session, status } = useSession();
     const router = useRouter();
@@ -72,6 +85,15 @@ function Dashboard({ data }: any) {
                 console.log(responsePets);
                 setPets(responsePets);
             });
+        }
+    }
+
+    const handleOnClickSetActivePet = async (id: string) => {
+        const currentUser = session?.user?.email;
+        if (currentUser) {
+            const responsePets = await setActivePet(id, currentUser);
+            console.log(responsePets);
+            setPets(responsePets);
         }
     }
 
@@ -105,6 +127,11 @@ function Dashboard({ data }: any) {
                             <div key={index}>
                                 <div className="">
                                     <h4 className="text-center mb-5"># {element.position}</h4>
+                                    {
+                                        index > 0 ?
+                                            <button type="button" onClick={async () => handleOnClickSetActivePet(element._id)} className="btn-primary">Set Active</button>
+                                            : null
+                                    }
                                 </div>
                                 <motion.div
                                     whileHover={{

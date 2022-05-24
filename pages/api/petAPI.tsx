@@ -9,12 +9,13 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
             return res.status(400).json({ msg: "Invalid Authentication!" })
         }
 
-        const { userId, petName, petType } = req.body;
+        const { userId, petName, petType, position } = req.body;
 
         let pet = new Pet({
             userId: userId,
             name: petName,
-            petType: petType
+            petType: petType,
+            position: position
         });
 
         let status = await pet.save();

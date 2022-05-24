@@ -54,10 +54,10 @@ async function getPetsByEmail(email: string) {
     return data;
 }
 
-async function createNewPet(userId: string, petName: string, petType: string) {
+async function createNewPet(userId: string, petName: string, petType: string, position: number) {
     const response = await fetch('/api/petAPI', {
         method: 'POST',
-        body: JSON.stringify({ userId, petName, petType }),
+        body: JSON.stringify({ userId, petName, petType, position }),
         headers: {
             'Content-Type': 'application/json',
         },
@@ -92,10 +92,10 @@ function CreatePet({ data }: any) {
                 userId: currentUser._id,
                 name: petName,
                 petType: selectedPetType._id,
-                position: responsePets.length
+                position: responsePets.length ? responsePets.length + 1 : 1
             }
-
-            const responsePet = await createNewPet(newPet.userId, newPet.name, newPet.petType);
+            console.log(responsePets);
+            const responsePet = await createNewPet(newPet.userId, newPet.name, newPet.petType, newPet.position);
             if (responsePet.isOk) {
                 Swal.fire({
                     position: 'top-right',

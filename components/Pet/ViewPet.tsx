@@ -70,17 +70,17 @@ function ViewPet({ data }: any) {
 
                         <div className="columns-2">
                             <h5 className="text-right underline">Attack Points:</h5>
-                            <h5>{pet.attackPoints}</h5>
+                            <h5>{pet.attackPoints?.toFixed(2)}</h5>
                         </div>
 
                         <div className="columns-2">
                             <h5 className="text-right underline">Defense Points:</h5>
-                            <h5>{pet.defensePoints}</h5>
+                            <h5>{pet.defensePoints?.toFixed(2)}</h5>
                         </div>
 
                         <div className="columns-2">
                             <h5 className="text-right underline">Agility Points:</h5>
-                            <h5>{pet.agilityPoints}</h5>
+                            <h5>{pet.agilityPoints?.toFixed(2)}</h5>
                         </div>
 
                         <div className="columns-2">

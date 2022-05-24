@@ -30,7 +30,7 @@ function PetCard({ pet }: any) {
     return (
         <div className="card w-70 mx-auto">
             <div style={{
-                backgroundImage: `url(${petType?.imageURL})`,
+                backgroundImage: `url(${petType?.imageURL ? petType.imageURL : ''})`,
                 height: '10rem',
                 width: '10rem',
                 backgroundSize: 'cover',

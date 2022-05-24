@@ -19,6 +19,30 @@ export async function getServerSideProps(context: any) {
 
     const { req } = context;
     const { cookie } = req.headers;
+    const { email } = session.user!;
+
+    const [responsePet] = await Promise.all([
+        fetch(`${process.env.NEXTAUTH_URL}/api/petAPI/getPetPositionOne/${email}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Cookie': cookie
+            },
+        }),
+    ]);
+
+    const [petR] = await Promise.all([
+        responsePet.json()
+    ]);
+    
+    if (!petR) {
+        return {
+            redirect: {
+                destination: '/',
+                permanent: false,
+            },
+        };
+    }
 
     const [responseOpponentBattlePets] = await Promise.all([
         fetch(`${process.env.NEXTAUTH_URL}/api/opponentBattlePetsAPI/`, {

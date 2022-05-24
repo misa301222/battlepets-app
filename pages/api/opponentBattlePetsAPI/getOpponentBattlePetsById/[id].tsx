@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { getSession } from "next-auth/react";
-import OpponentBattlePet from "../../../../models/opponentBattlePet";
+import OpponentBattlePet from "../../../../models/opponentBattlePetModel";
 
 async function handler(req: NextApiRequest, res: NextApiResponse) {
     if (req.method === 'GET') {

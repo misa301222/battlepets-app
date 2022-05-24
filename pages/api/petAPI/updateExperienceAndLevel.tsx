@@ -17,9 +17,27 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
             case 'WIN':
                 pet.experience += experience;
                 pet.wins++;
-                let level = Math.floor(pet.experience / 100);
+                let level = Math.floor(pet.experience / 100) < 1 ? 1 : Math.floor(pet.experience / 100);
+                const logarithm = level > 1 ? Math.log(level) : 1;
 
-                await Pet.findByIdAndUpdate(id, {
+                const baseHp = 10;
+                const baseMp = 15;
+                const baseAttack = 8;
+                const baseDefense = 5;
+                const baseAgility = 3;
+
+                let newMp = (baseMp * (logarithm * level))
+                let newHp = (baseHp * (logarithm * level))
+                let newAttack = (baseAttack * (logarithm * level))
+                let newDefense = (baseDefense * (logarithm * level))
+                let newAgility = (baseAgility * (logarithm * level))
+
+                pet = await Pet.findByIdAndUpdate(id, {
+                    maxHealthPoints: newHp,
+                    maxMagicPoints: newMp,
+                    attackPoints: newAttack,
+                    defensePoints: newDefense,
+                    agilityPoints: newAgility,
                     experience: pet.experience,
                     level: level,
                     wins: pet.wins

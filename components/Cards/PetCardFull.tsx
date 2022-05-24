@@ -30,7 +30,7 @@ function PetCardFull({ pet }: any) {
     return (
         <div className="card w-[25rem]">
             <div style={{
-                backgroundImage: `url(${petType?.imageURL})`,
+                backgroundImage: `url(${petType?.imageURL ? petType.imageURL : ''})`,
                 height: '10rem',
                 width: '10rem',
                 backgroundSize: 'cover',
