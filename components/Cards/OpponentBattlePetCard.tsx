@@ -25,7 +25,7 @@ function OpponentBattlePetCard({ opponentBattlePet }: any) {
         getTypeById(opponentBattlePet?.petType).then(response => {
             setPetType(response);
         });
-    }, [])
+    }, [opponentBattlePet])
 
     return (
 

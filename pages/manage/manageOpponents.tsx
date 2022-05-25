@@ -2,8 +2,8 @@ import { NextPage } from "next";
 import { getSession } from "next-auth/react";
 import ManageOpponent from "../../components/Manage/ManageOpponent";
 
-const ManageOpponentPage: NextPage = ({ opponentBattlePets }: any) => {
-    return <ManageOpponent data={{ opponentBattlePets }} />
+const ManageOpponentPage: NextPage = ({ opponentBattlePets, petTypes }: any) => {
+    return <ManageOpponent data={{ opponentBattlePets, petTypes }} />
 }
 
 export async function getServerSideProps(context: any) {
@@ -20,8 +20,15 @@ export async function getServerSideProps(context: any) {
     const { req } = context;
     const { cookie } = req.headers;
 
-    const [responseOpponentBattle] = await Promise.all([
+    const [responseOpponentBattle, responsePetTypes] = await Promise.all([
         fetch(`${process.env.NEXTAUTH_URL}/api/opponentBattlePetsAPI`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Cookie': cookie
+            },
+        }),
+        fetch(`${process.env.NEXTAUTH_URL}/api/petTypesAPI/`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -30,11 +37,12 @@ export async function getServerSideProps(context: any) {
         }),
     ]);
 
-    const [opponentBattleR] = await Promise.all([
-        responseOpponentBattle.json()
+    const [opponentBattleR, petTypesR] = await Promise.all([
+        responseOpponentBattle.json(),
+        responsePetTypes.json()
     ]);
 
-    return { props: { opponentBattlePets: opponentBattleR } }
+    return { props: { opponentBattlePets: opponentBattleR, petTypes: petTypesR } }
 }
 
 export default ManageOpponentPage;

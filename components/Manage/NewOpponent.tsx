@@ -33,8 +33,8 @@ async function createNewOpponentPet(newPet: OpponentBattlePet) {
             'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-            currentHealthPoints: newPet.currentHealthPoints,
-            currentMagicPoints: newPet.currentMagicPoints,
+            maxHealthPoints: newPet.maxHealthPoints,
+            maxMagicPoints: newPet.maxMagicPoints,
             name: newPet.name,
             attackPoints: newPet.attackPoints,
             defensePoints: newPet.defensePoints,

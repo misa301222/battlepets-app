@@ -31,6 +31,10 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
             position: 1
         }, { new: true });
 
+        pets = await Pet.find({
+            userId: ObjectId(user._id)
+        }).sort({ position: 'asc' });
+
         res.status(201).json(pets)
 
     }

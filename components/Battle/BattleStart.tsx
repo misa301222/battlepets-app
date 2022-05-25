@@ -34,7 +34,7 @@ function BattleStart({ data }: any) {
             </div>
 
             <h2 className="text-center">Opponents</h2>
-            <div className="mt-5 flex flex-wrap justify-center w-4/5 mx-auto">
+            <div className="mt-5 flex flex-wrap justify-center gap-10 w-4/5 mx-auto">
                 {opponentBattlePet.map((element: OpponentBattlePet, index: number) => (
                     <motion.div className="w-fit cursor-pointer" key={index}
                         whileHover={{

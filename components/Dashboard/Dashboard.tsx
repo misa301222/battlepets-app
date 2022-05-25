@@ -1,4 +1,4 @@
-import { faHeartPulse, faHippo, faPaw, faRadiationAlt, faShieldCat } from "@fortawesome/free-solid-svg-icons";
+import { faHeartPulse, faHippo, faPaw, faRadiationAlt, faShieldCat, faStar } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
@@ -126,12 +126,7 @@ function Dashboard({ data }: any) {
                         pets.map((element: Pet, index: number) => (
                             <div key={index}>
                                 <div className="">
-                                    <h4 className="text-center mb-5"># {element.position}</h4>
-                                    {
-                                        index > 0 ?
-                                            <button type="button" onClick={async () => handleOnClickSetActivePet(element._id)} className="btn-primary">Set Active</button>
-                                            : null
-                                    }
+                                    <h4 className="text-center mb-5"># {index + 1}</h4>
                                 </div>
                                 <motion.div
                                     whileHover={{
@@ -142,6 +137,13 @@ function Dashboard({ data }: any) {
                                     onClick={() => handleOnClickOpenModal(element)}>
                                     <PetCard pet={element} />
                                 </motion.div>
+                                {
+                                    index > 0 ?
+                                        <div className="flex flex-row justify-center mt-10">
+                                            <button type="button" onClick={async () => handleOnClickSetActivePet(element._id)} className="btn-dark"><FontAwesomeIcon icon={faStar} /> Set Active</button>
+                                        </div>
+                                        : null
+                                }
                             </div>
                         ))
                     }
