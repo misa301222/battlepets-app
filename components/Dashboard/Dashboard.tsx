@@ -110,7 +110,8 @@ function Dashboard({ data }: any) {
                     <div className="flex flex-row gap-5">
                         <button type="button" onClick={() => router.push('/createPet')} className="btn-primary text-black"><FontAwesomeIcon icon={faHippo} /> Create Pet</button>
                         <button type="button" onClick={() => router.push('/')} className="btn-secondary"><FontAwesomeIcon icon={faHeartPulse} /> Adopt Pet</button>
-                        <button type="button" onClick={() => router.push('/')} className="btn-danger"><FontAwesomeIcon icon={faRadiationAlt} /> Leave Pet</button>
+                        <button type="button" onClick={() => router.push('/')} className="btn-tertiary"><FontAwesomeIcon icon={faRadiationAlt} /> Leave In Adoption</button>
+                        <button type="button" onClick={() => router.push('/deletePet')} className="btn-danger"><FontAwesomeIcon icon={faRadiationAlt} /> Delete Pet</button>
                     </div>
                 </div>
             </div>

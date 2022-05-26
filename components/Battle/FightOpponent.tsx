@@ -89,7 +89,7 @@ function FightOpponent({ data }: any) {
     }
 
     const handleOnClickAction = async (action: string) => {
-        const multiplier: number = userPet.attackPoints! / 10 / 4;
+        const multiplier: number = userPet.attackPoints! / 10 / 4 - (opponentPet.defensePoints! / 10 / 4) > 0 ? userPet.attackPoints! / 10 / 4 - (opponentPet.defensePoints! / 10 / 4) : 0.3;
         const battleLogIndex: number = battleLog.length;
 
         const newOpponentPet: Pet = opponentPet;
@@ -107,6 +107,13 @@ function FightOpponent({ data }: any) {
                 break;
 
             case 'Defense':
+                message += `Defense!`;
+                let isDefended: boolean = Math.random() < 0.3;
+                if (isDefended) {
+                    message += ` You blocked All damage for this turn!`;
+                } else {
+                    message += ` But it didn't work :(!`;
+                }
                 break;
 
             case 'Heal':
@@ -137,7 +144,7 @@ function FightOpponent({ data }: any) {
 
     const opponentAction = async (newMessage: BattleLog) => {
         let maxNumber: number = 2;
-        const multiplier: number = 0.3;
+        const multiplier: number = opponentPet.attackPoints! / 10 / 4 - (userPet.defensePoints! / 10 / 4) > 0 ? opponentPet.attackPoints! / 10 / 4 - (userPet.defensePoints! / 10 / 4) : 0.3;
 
         const newOpponentPet: Pet = opponentPet;
         const newUserPet: Pet = userPet;
@@ -150,7 +157,7 @@ function FightOpponent({ data }: any) {
             maxNumber = 3;
         }
         let actionRandom: number = Math.floor(Math.random() * (maxNumber)) + 1;
-        actionRandom = 2;
+        // actionRandom = 2;
         let message: string = `${newOpponentPet.name} used `;
 
         switch (hashActions.get(actionRandom)) {
@@ -164,6 +171,12 @@ function FightOpponent({ data }: any) {
                 break;
 
             case 'Defense':
+                let isDefended: boolean = Math.random() < 0.3;
+                if (isDefended) {
+                    message += ` Opponent blocked All damage for this turn!`;
+                } else {
+                    message += ` But it didn't work >:)!`;
+                }
                 break;
 
             case 'Heal':
