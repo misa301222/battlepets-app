@@ -103,7 +103,7 @@ function FightOpponent({ data }: any) {
                 newOpponentPet.currentHealthPoints! -= damage;
                 setOpponentPet(prev => ({ ...prev, currentHealthPoints: newOpponentPet.currentHealthPoints }));
 
-                message += `Attack! That was ${damage} of Damage!`;
+                message += `Attack! That was ${damage.toFixed(2)} of Damage!`;
                 break;
 
             case 'Defense':
@@ -126,7 +126,7 @@ function FightOpponent({ data }: any) {
                 }
 
                 setUserPet(prev => ({ ...prev, currentHealthPoints: newUserPet.currentHealthPoints, currentMagicPoints: newUserPet.currentMagicPoints }));
-                message += `Healed! You Recovered ${heal} HP!`
+                message += `Healed! You Recovered ${heal.toFixed(2)} HP!`
                 break;
 
             case 'Skip':
@@ -167,7 +167,7 @@ function FightOpponent({ data }: any) {
                 newUserPet.currentHealthPoints! -= damage;
                 setUserPet(prev => ({ ...prev, currentHealthPoints: newUserPet.currentHealthPoints }));
 
-                message += `Attack! That was ${damage} of Damage!`;
+                message += `Attack! That was ${damage.toFixed(2)} of Damage!`;
                 break;
 
             case 'Defense':
@@ -189,7 +189,7 @@ function FightOpponent({ data }: any) {
                 }
 
                 setOpponentPet(prev => ({ ...prev, currentHealthPoints: newOpponentPet.currentHealthPoints, currentMagicPoints: newOpponentPet.currentMagicPoints }));
-                message += `Healed! Opponent Recovered ${heal} HP!`
+                message += `Healed! Opponent Recovered ${heal.toFixed(2)} HP!`
                 break;
         }
         newMessage.secondMessage = message;

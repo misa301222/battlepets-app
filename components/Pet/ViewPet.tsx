@@ -1,6 +1,6 @@
 import { faFireAlt } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import Image from "next/image";
+import { motion } from 'framer-motion';
 import { useState } from "react";
 import UserCard from "../Cards/UserCard";
 
@@ -38,7 +38,20 @@ function ViewPet({ data }: any) {
 
     return (
         <div>
-            <div className="flex flex-row w-4/5 card p-5 mx-auto mt-10">
+            <motion.div
+                initial={{
+                    opacity: 0.3,
+                    translateX: -200
+                }}
+                animate={{
+                    opacity: 1,
+                    translateX: 0,
+                    transition: {
+                        delay: 0.3
+                    }
+                }}
+
+                className="flex flex-row w-4/5 card p-5 mx-auto mt-10">
                 <div className="w-1/2"
                     style={{
                         backgroundImage: `url(${petType.imageURL})`,
@@ -102,7 +115,7 @@ function ViewPet({ data }: any) {
                         </div>
                     </div>
                 </div>
-            </div>
+            </motion.div>
 
 
             <h2 className="text-center mt-10">Owned By</h2>

@@ -29,7 +29,7 @@ function OpponentBattlePetCard({ opponentBattlePet }: any) {
 
     return (
 
-        <div className="card w-56 mx-auto">
+        <div className="card w-[25rem] mx-auto">
             <div style={{
                 backgroundImage: `url(${petType?.imageURL ? petType.imageURL : ''})`,
                 height: '10rem',

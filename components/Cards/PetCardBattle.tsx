@@ -28,7 +28,7 @@ function PetCardBattle({ pet }: any) {
     }, []);
 
     return (
-        <div className="card w-96 mx-auto">
+        <div className="card w-[25rem] mx-auto">
             <div style={{
                 backgroundImage: `url(${petType?.imageURL ? petType?.imageURL : ''})`,
                 height: '10rem',

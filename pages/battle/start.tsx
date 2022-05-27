@@ -2,8 +2,8 @@ import { NextPage } from "next";
 import { getSession } from "next-auth/react";
 import BattleStart from "../../components/Battle/BattleStart";
 
-const BattleStartPage: NextPage = ({ opponentBattlePets }: any) => {
-    return (<BattleStart data={{ opponentBattlePets }} />)
+const BattleStartPage: NextPage = ({ opponentBattlePets, allowed }: any) => {
+    return (<BattleStart data={{ opponentBattlePets, allowed }} />)
 }
 
 export async function getServerSideProps(context: any) {
@@ -34,7 +34,7 @@ export async function getServerSideProps(context: any) {
     const [petR] = await Promise.all([
         responsePet.json()
     ]);
-    
+
     if (!petR) {
         return {
             redirect: {
@@ -42,6 +42,10 @@ export async function getServerSideProps(context: any) {
                 permanent: false,
             },
         };
+    }
+
+    if (petR.currentHealthPoints <= 0) {
+        return { props: { allowed: false } }
     }
 
     const [responseOpponentBattlePets] = await Promise.all([
@@ -58,7 +62,7 @@ export async function getServerSideProps(context: any) {
         responseOpponentBattlePets.json()
     ]);
 
-    return { props: { opponentBattlePets: opponentBattlePetsR } }
+    return { props: { opponentBattlePets: opponentBattlePetsR, allowed: true } }
 }
 
 export default BattleStartPage;

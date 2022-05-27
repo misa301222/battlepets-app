@@ -1,4 +1,4 @@
-import { faAddressCard, faDoorOpen, faGears, faRightFromBracket, faStar, faUserNinja } from "@fortawesome/free-solid-svg-icons";
+import { faAddressCard, faDoorOpen, faGears, faRightFromBracket, faSearch, faStar, faUserNinja } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Menu, Transition } from "@headlessui/react";
 import { signOut, useSession } from "next-auth/react";
@@ -39,7 +39,7 @@ function NavigationBar() {
                         {
                             session && (
                                 <div>
-                                    <Link href={'/dashboard'}><h5 className="cursor-pointer"><FontAwesomeIcon icon={faStar}/> Dashboard</h5></Link>
+                                    <Link href={'/dashboard'}><h5 className="cursor-pointer"><FontAwesomeIcon icon={faStar} /> Dashboard</h5></Link>
                                 </div>
                             )
                         }
@@ -58,6 +58,15 @@ function NavigationBar() {
                     </div>
                 </div>
             </div>
+
+            {
+                session && (
+                    <div className="mr-4">
+                        <Link href={'/search'}>
+                            <FontAwesomeIcon className="cursor-pointer text-[2rem]" icon={faSearch} />
+                        </Link>
+                    </div>)
+            }
 
             <Menu as="div" className="ml-3 relative">
                 <div>
@@ -115,9 +124,7 @@ function NavigationBar() {
                     </Menu.Items>
                 </Transition>
             </Menu>
-
-
-        </nav >
+        </nav>
     )
 }
 

@@ -16,7 +16,7 @@ function UserCard({ user, userProfile }: any) {
                             whileHover={{
                                 scale: 1.1
                             }}
-                            src={user.imageURL} className='w-44 rounded-full mx-auto cursor-pointer' />
+                            src={user.imageURL} className='w-44 h-44 rounded-full mx-auto cursor-pointer' />
                     </Link>
                 </div>
 
