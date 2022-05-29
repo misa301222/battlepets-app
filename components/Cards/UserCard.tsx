@@ -7,6 +7,7 @@ function UserCard({ user, userProfile }: any) {
             style={{
                 backgroundImage: `${userProfile.coverURL ? `linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url(${userProfile.coverURL})` : ''}`,
                 backgroundSize: 'cover',
+                backgroundPosition: 'center',
                 backgroundColor: `${userProfile.coverURL ? '' : 'black'}`
             }}>
             <div className="flex flex-row h-full">
@@ -16,7 +17,7 @@ function UserCard({ user, userProfile }: any) {
                             whileHover={{
                                 scale: 1.1
                             }}
-                            src={user.imageURL} className='w-44 h-44 rounded-full mx-auto cursor-pointer' />
+                            src={user.imageURL} className='w-44 h-44 rounded-full mx-auto cursor-pointer bg-cover bg-center' />
                     </Link>
                 </div>
 

@@ -1,10 +1,15 @@
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { SyntheticEvent, useState } from "react";
+import SearchResultCard from "../Cards/SearchResultCard";
+import { motion } from 'framer-motion';
+import { useRouter } from "next/router";
 
 interface SearchResult {
+    _id: string,
     name: string,
     imageURL: string,
+    email?: string,
     type: string
 }
 
@@ -22,21 +27,43 @@ async function searchPetAndUser(search: string) {
 
 function Search() {
     const [search, setSearch] = useState<string>('');
-    const [searchResults, setSearchResults] = useState<any>();
+    const [searchResults, setSearchResults] = useState<SearchResult[]>();
+    const router = useRouter();
+
+    const handleOnClickSearchResultCard = (element: SearchResult) => {
+        switch (element.type) {
+            case 'USER':
+                router.push(`/seeUserProfile/${element.email}`);
+                break;
+
+            case 'PET':
+                router.push(`/viewPet/${element._id}`);
+                break;
+        }
+    }
 
     const handleOnSubmitSearchForm = async (event: SyntheticEvent) => {
         event.preventDefault();
 
         const responseSearch = await searchPetAndUser(search);
-        console.log(responseSearch);
+        let searchResultsArray: SearchResult[] = [];
+        // console.log(responseSearch);
         if (responseSearch.resultsPets) {
-            setSearchResults(responseSearch.resultsPets);
+            for (let i = 0; i < responseSearch.resultsPets[0].length; i++) {
+                responseSearch.resultsPets[0][i].type = 'PET';
+                console.log(responseSearch.resultsPets[0][i]);
+                searchResultsArray.push(responseSearch.resultsPets[0][i]);
+            }
         }
 
-        //TODO APPEND THIS TOO
         if (responseSearch.resultsUsers) {
-            //setSearchResults(prev => ([...prev, responseSearch.resultsUsers]));
+            for (let i = 0; i < responseSearch.resultsUsers[0].length; i++) {
+                responseSearch.resultsUsers[0][i].type = 'USER';
+                searchResultsArray.push(responseSearch.resultsUsers[0][i]);
+            }
         }
+        console.log(searchResultsArray);
+        setSearchResults(searchResultsArray);
     }
 
     return (
@@ -53,7 +80,7 @@ function Search() {
                     </div>
 
                     <div className="w-2/3">
-                        <input onChange={(e) => setSearch(e.target.value)} className="form-control" type={'text'} />
+                        <input onChange={(e) => setSearch(e.target.value)} className="form-control" type={'text'} placeholder={'Type what you want to search...'} />
                     </div>
 
                     <div className="w-1/3 text-center">
@@ -62,10 +89,20 @@ function Search() {
                 </div>
             </form>
 
-            <div>
+            <div className="w-4/5 mx-auto flex flex-wrap gap-10">
                 {
-                    JSON.stringify(searchResults)
+                    searchResults?.map((element: SearchResult, index: number) => (
+                        <motion.div
+                            whileHover={{
+                                scale: 1.1
+                            }}
+                            key={index} className="mt-10 cursor-pointer"
+                            onClick={() => handleOnClickSearchResultCard(element)}>
+                            <SearchResultCard element={element} />
+                        </motion.div>
+                    ))
                 }
+
             </div>
         </div>
     )

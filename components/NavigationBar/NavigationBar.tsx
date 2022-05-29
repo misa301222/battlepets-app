@@ -1,9 +1,10 @@
-import { faAddressCard, faDoorOpen, faGears, faRightFromBracket, faSearch, faStar, faUserNinja } from "@fortawesome/free-solid-svg-icons";
+import { faAddressCard, faGears, faRightFromBracket, faSearch, faShieldCat, faStar, faUserNinja } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Menu, Transition } from "@headlessui/react";
 import { signOut, useSession } from "next-auth/react";
 import Link from "next/link";
 import { Fragment } from "react";
+import { motion } from 'framer-motion';
 
 function NavigationBar() {
     const { data: session, status } = useSession();
@@ -17,42 +18,60 @@ function NavigationBar() {
         signOut({
             callbackUrl: '/'
         });
-
     }
 
     return (
         <nav className="flex items-center justify-between flex-wrap bg-black/90 p-6 shadow-sm shadow-gray-400 text-white">
             <div className="w-54 flex justify-evenly items-center">
-                <h2 className="font-bold"><Link href={'/'}> Battle Pets App </Link></h2>
+
+                <motion.h2
+                    whileHover={{
+                        scale: 1.15,
+                        rotate: -5
+                    }}
+                    className="font-bold hover:text-amber-500 cursor-pointer"><Link href={'/'}><div><FontAwesomeIcon icon={faShieldCat} /> Battle Pets App</div></Link></motion.h2>
+
             </div>
             <div className="w-full block flex-grow lg:flex lg:items-center lg:w-auto">
                 <div className="text-lg lg:flex-grow">
                     <div className="p-1 w-fit m-auto flex flex-row gap-5 items-center">
                         {
                             !session && (
-                                <div>
-                                    <Link href={'/register'}> Register</Link>
-                                    <Link href={'/login'}> Login</Link>
+                                <div className="flex flex-row gap-5">
+                                    <Link href={'/register'}>
+                                        <motion.h5
+                                            className='ease-in-out duration-300 hover:text-amber-400 cursor-pointer'> Register</motion.h5></Link>
+                                    <Link href={'/login'}><motion.h5
+                                        className='ease-in-out duration-300 hover:text-amber-400 cursor-pointer'
+                                    > Login </motion.h5></Link>
                                 </div>
                             )
                         }
                         {
                             session && (
                                 <div>
-                                    <Link href={'/dashboard'}><h5 className="cursor-pointer"><FontAwesomeIcon icon={faStar} /> Dashboard</h5></Link>
+                                    <Link href={'/dashboard'}>
+                                        <motion.h5
+                                            whileHover={{
+                                                scale: 1.1
+                                            }}
+                                            className="cursor-pointer hover:text-amber-400"><FontAwesomeIcon icon={faStar} /> Dashboard</motion.h5>
+                                    </Link>
                                 </div>
                             )
                         }
                         {
                             session && (
                                 <div>
-                                    <Link href={'/battle/start'}><h5 className="cursor-pointer"><FontAwesomeIcon icon={faUserNinja} /> Battle</h5></Link>
+                                    <Link href={'/battle/start'}>
+                                        <motion.h5
+                                            whileHover={{
+                                                scale: 1.1
+                                            }}
+                                            className="cursor-pointer hover:text-amber-400">
+                                            <FontAwesomeIcon icon={faUserNinja} /> Battle</motion.h5>
+                                    </Link>
                                 </div>
-                            )
-                        }
-                        {
-                            session && (
-                                <button onClick={handleOnClickLogout} type="button" className="btn-primary"><FontAwesomeIcon icon={faDoorOpen} /> Logout</button>
                             )
                         }
                     </div>
@@ -63,7 +82,12 @@ function NavigationBar() {
                 session && (
                     <div className="mr-4">
                         <Link href={'/search'}>
-                            <FontAwesomeIcon className="cursor-pointer text-[2rem]" icon={faSearch} />
+                            <motion.h5
+                                whileHover={{
+                                    scale: 1.1
+                                }}>
+                                <FontAwesomeIcon className="cursor-pointer text-[2rem] hover:text-amber-400" icon={faSearch} />
+                            </motion.h5>
                         </Link>
                     </div>)
             }

@@ -89,7 +89,7 @@ function FightOpponent({ data }: any) {
     }
 
     const handleOnClickAction = async (action: string) => {
-        const multiplier: number = userPet.attackPoints! / 10 / 4 - (opponentPet.defensePoints! / 10 / 4) > 0 ? userPet.attackPoints! / 10 / 4 - (opponentPet.defensePoints! / 10 / 4) : 0.3;
+        const multiplier: number = userPet.attackPoints! / 10 / 4 - (opponentPet.defensePoints! / 10 / 4) > 0 ? ((userPet.attackPoints! / 10 / 4) - (opponentPet.defensePoints! / 10 / 4)) * 0.1 : 0.3;
         const battleLogIndex: number = battleLog.length;
 
         const newOpponentPet: Pet = opponentPet;
@@ -99,6 +99,7 @@ function FightOpponent({ data }: any) {
 
         switch (action) {
             case 'Attack':
+                console.log(multiplier);
                 const damage: number = newUserPet.attackPoints! * multiplier
                 newOpponentPet.currentHealthPoints! -= damage;
                 setOpponentPet(prev => ({ ...prev, currentHealthPoints: newOpponentPet.currentHealthPoints }));
@@ -144,7 +145,7 @@ function FightOpponent({ data }: any) {
 
     const opponentAction = async (newMessage: BattleLog) => {
         let maxNumber: number = 2;
-        const multiplier: number = opponentPet.attackPoints! / 10 / 4 - (userPet.defensePoints! / 10 / 4) > 0 ? opponentPet.attackPoints! / 10 / 4 - (userPet.defensePoints! / 10 / 4) : 0.3;
+        const multiplier: number = opponentPet.attackPoints! / 10 / 4 - (userPet.defensePoints! / 10 / 4) > 0 ? (opponentPet.attackPoints! / 10 / 4 - (userPet.defensePoints! / 10 / 4)) * 0.1 : 0.3;
 
         const newOpponentPet: Pet = opponentPet;
         const newUserPet: Pet = userPet;

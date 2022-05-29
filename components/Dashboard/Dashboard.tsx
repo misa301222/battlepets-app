@@ -133,8 +133,13 @@ function Dashboard({ data }: any) {
                                     whileHover={{
                                         scale: 1.1
                                     }}
+                                    initial={{
+                                        opacity: 0
+                                    }}
+                                    animate={{
+                                        opacity: 1
+                                    }}
                                     className='cursor-pointer'
-
                                     onClick={() => handleOnClickOpenModal(element)}>
                                     <PetCard pet={element} />
                                 </motion.div>

@@ -27,12 +27,15 @@ function Settings() {
                 </motion.div>
             </div>
 
-            <div className="mt-20">
-                <h1 className="text-center">Admin Tools</h1>
-                <hr />
-                <div className="container mx-auto flex flex-wrap justify-center mt-5">
-                    {
-                        session?.user?.role === 'ADMINISTRATOR' ?
+
+            {
+
+                session?.user?.role === 'ADMINISTRATOR' ?
+                    <div className="mt-20">
+                        <h1 className="text-center">Admin Tools</h1>
+                        <hr />
+                        <div className="container mx-auto flex flex-wrap justify-center mt-5">
+
                             <motion.div
                                 whileHover={{
                                     scale: 1.1
@@ -42,11 +45,10 @@ function Settings() {
                                 <FontAwesomeIcon icon={faUserNinja} className='text-[5rem]' />
                                 <h5 className="mt-5">Manage Opponents</h5>
                             </motion.div>
-
-                            : null
-                    }
-                </div>
-            </div>
+                        </div>
+                    </div>
+                    : null
+            }
         </div>
     )
 }

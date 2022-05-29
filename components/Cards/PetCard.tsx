@@ -25,7 +25,7 @@ function PetCard({ pet }: any) {
         getTypeById(pet.petType).then(response => {
             setPetType(response);
         });
-    }, [])
+    }, [pet])
 
     return (
         <div className="card w-[25rem] mx-auto">
@@ -43,7 +43,7 @@ function PetCard({ pet }: any) {
 
             <h4 className="text-center mt-5 mb-2">{pet.name}</h4>
             <hr />
-            <div className="max-w-sm">
+            <div className="max-w-sm bg-gray-100">
                 <div className="columns-2">
                     <h5 className="text-right">HP:</h5>
                     <h5 style={{ color: `${pet.currentHealthPoints <= pet.maxHealthPoints / 4 ? 'red' : `${pet.currentHealthPoints <= pet.maxHealthPoints / 2 ? '#f59e0b' : 'black'}`}` }}>{pet.currentHealthPoints.toFixed(2)} / {pet.maxHealthPoints.toFixed(2)}</h5>
