@@ -6,6 +6,29 @@ interface PetType {
     imageURL: string
 }
 
+interface Pet {
+    _id: string,
+    userId: string,
+    currentHealthPoints?: number,
+    maxHealthPoints?: number,
+    name: string,
+    attackPoints?: number,
+    defensePoints?: number,
+    agilityPoints?: number,
+    currentMagicPoints?: number,
+    maxMagicPoints?: number,
+    availableAttacks?: string[],
+    level?: number,
+    imageURL?: string,
+    customImageURL?: string,
+    wins?: number,
+    defeats?: number,
+    draws?: number,
+    petType: string,
+    position: number,
+    experience: number
+}
+
 async function getTypeById(id: string) {
     const response = await fetch(`/api/petTypesAPI/${id}`, {
         method: 'GET',
@@ -18,7 +41,11 @@ async function getTypeById(id: string) {
     return data;
 }
 
-function PetCardFull({ pet }: any) {
+type Props = {
+    pet: Pet
+}
+
+function PetCardFull({ pet }: Props) {
     const [petType, setPetType] = useState<PetType>();;
 
     useEffect(() => {
@@ -46,12 +73,12 @@ function PetCardFull({ pet }: any) {
             <div className="mb-4">
                 <div className="columns-2">
                     <h5 className="text-right">HP:</h5>
-                    <h5 style={{ color: `${pet.currentHealthPoints <= pet.maxHealthPoints / 4 ? 'red' : `${pet.currentHealthPoints <= pet.maxHealthPoints / 2 ? '#f59e0b' : 'black'}`}` }}>{pet.currentHealthPoints.toFixed(2)} / {pet.maxHealthPoints.toFixed(2)}</h5>
+                    <h5 style={{ color: `${pet.currentHealthPoints! <= pet.maxHealthPoints! / 4 ? 'red' : `${pet.currentHealthPoints! <= pet.maxHealthPoints! / 2 ? '#f59e0b' : 'black'}`}` }}>{pet.currentHealthPoints!.toFixed(2)} / {pet.maxHealthPoints!.toFixed(2)}</h5>
                 </div>
 
                 <div className="columns-2">
                     <h5 className="text-right">MP:</h5>
-                    <h5 style={{ color: `${pet.currentMagicPoints <= pet.maxMagicPoints / 4 ? 'red' : `${pet.currentMagicPoints <= pet.maxMagicPoints / 2 ? '#f59e0b' : 'black'}`}` }}>{pet.currentMagicPoints.toFixed(2)} / {pet.maxMagicPoints.toFixed(2)}</h5>
+                    <h5 style={{ color: `${pet.currentMagicPoints! <= pet.maxMagicPoints! / 4 ? 'red' : `${pet.currentMagicPoints! <= pet.maxMagicPoints! / 2 ? '#f59e0b' : 'black'}`}` }}>{pet.currentMagicPoints!.toFixed(2)} / {pet.maxMagicPoints!.toFixed(2)}</h5>
                 </div>
 
                 <div className="columns-2">
@@ -71,7 +98,7 @@ function PetCardFull({ pet }: any) {
 
                 <div className="columns-2">
                     <h5 className="text-right">Total Matches</h5>
-                    <h5>{pet.wins + pet.defeats + pet.draws}</h5>
+                    <h5>{pet.wins! + pet.defeats! + pet.draws!}</h5>
                 </div>
 
                 <div className="columns-2">

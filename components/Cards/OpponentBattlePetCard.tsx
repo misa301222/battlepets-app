@@ -6,6 +6,23 @@ interface PetType {
     imageURL: string
 }
 
+interface OpponentBattlePet {
+    _id: string,
+    currentHealthPoints?: number,
+    maxHealthPoints?: number,
+    name: string,
+    attackPoints?: number,
+    defensePoints?: number,
+    agilityPoints?: number,
+    currentMagicPoints?: number,
+    maxMagicPoints?: number,
+    availableAttacks?: string[],
+    level?: number,
+    imageURL?: string,
+    customImageURL?: string,
+    petType: string
+}
+
 async function getTypeById(id: string) {
     const response = await fetch(`/api/petTypesAPI/${id}`, {
         method: 'GET',
@@ -18,7 +35,11 @@ async function getTypeById(id: string) {
     return data;
 }
 
-function OpponentBattlePetCard({ opponentBattlePet }: any) {
+type Props = {
+    opponentBattlePet: OpponentBattlePet
+}
+
+function OpponentBattlePetCard({ opponentBattlePet }: Props) {
     const [petType, setPetType] = useState<PetType>();;
 
     useEffect(() => {
@@ -47,12 +68,12 @@ function OpponentBattlePetCard({ opponentBattlePet }: any) {
             <div className="bg-gray-100">
                 <div className="columns-2">
                     <h5 className="text-right">HP:</h5>
-                    <h5 style={{ color: `${opponentBattlePet?.currentHealthPoints <= opponentBattlePet?.maxHealthPoints / 2 ? 'yellow' : 'black'}` }}>{opponentBattlePet?.currentHealthPoints} / {opponentBattlePet?.maxHealthPoints}</h5>
+                    <h5 style={{ color: `${opponentBattlePet?.currentHealthPoints! <= opponentBattlePet?.maxHealthPoints! / 2 ? 'yellow' : 'black'}` }}>{opponentBattlePet?.currentHealthPoints} / {opponentBattlePet?.maxHealthPoints}</h5>
                 </div>
 
                 <div className="columns-2">
                     <h5 className="text-right">MP:</h5>
-                    <h5 style={{ color: `${opponentBattlePet?.currentMagicPoints <= opponentBattlePet?.maxMagicPoints / 2 ? 'yellow' : 'black'}` }}>{opponentBattlePet?.currentMagicPoints} / {opponentBattlePet?.maxMagicPoints}</h5>
+                    <h5 style={{ color: `${opponentBattlePet?.currentMagicPoints! <= opponentBattlePet?.maxMagicPoints! / 2 ? 'yellow' : 'black'}` }}>{opponentBattlePet?.currentMagicPoints} / {opponentBattlePet?.maxMagicPoints}</h5>
                 </div>
 
                 <div className="columns-2">

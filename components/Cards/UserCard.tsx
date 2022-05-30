@@ -1,7 +1,31 @@
 import { motion } from 'framer-motion';
 import Link from 'next/link';
 
-function UserCard({ user, userProfile }: any) {
+interface User {
+    _id: string,
+    fullName: string,
+    email: string,
+    imageURL: string,
+    role: string,
+    privateInfo: boolean
+}
+
+interface UserProfile {
+    _id: string,
+    descriptionHeader: string,
+    description: string,
+    hobbies: string[],
+    imagesURL: string[],
+    coverURL: string,
+    location: string
+}
+
+type Props = {
+    user: User,
+    userProfile: UserProfile
+}
+
+function UserCard({ user, userProfile }: Props) {
     return (
         <div className="w-[44rem] h-[13rem] shadow-black shadow-md"
             style={{

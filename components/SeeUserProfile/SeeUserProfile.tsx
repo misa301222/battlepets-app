@@ -1,6 +1,9 @@
 import { useState } from "react";
 import { motion } from 'framer-motion';
 import PetCardDetail from "../Cards/PetCardDetail";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faDog } from "@fortawesome/free-solid-svg-icons";
+import { useRouter } from "next/router";
 
 interface User {
     _id: string,
@@ -48,6 +51,7 @@ function SeeUserProfile({ data }: any) {
     const [user] = useState<User>(data.user as User);
     const [userProfile] = useState<UserProfile>(data.userProfile as UserProfile);
     const [pets] = useState<Pet[]>(data.pets as Pet[]);
+    const router = useRouter();
 
     return (
         <div>
@@ -127,17 +131,23 @@ function SeeUserProfile({ data }: any) {
             </div>
 
             <div className="mt-20 text-center w-[80%] mx-auto">
-                <h1 className="mb-2">Pets</h1>
+                <h1 className="mb-2"><FontAwesomeIcon icon={faDog} /> Pets</h1>
                 <hr className="border-black" />
-
-                {
-                    pets.map((element: Pet, index: number) => (
-                        <div key={index}>
-                            <PetCardDetail pet={element} />
-                        </div>
-                    ))
-                }
-
+                <div className="flex flex-wrap gap-10 mt-5">
+                    {
+                        pets.map((element: Pet, index: number) => (
+                            <motion.div key={index}
+                                whileHover={{
+                                    scale: 1.1
+                                }}
+                                className='cursor-pointer'
+                                onClick={() => router.push(`/viewPet/${element._id}`)}
+                            >
+                                <PetCardDetail pet={element} />
+                            </motion.div>
+                        ))
+                    }
+                </div>
             </div>
         </div>
     )
