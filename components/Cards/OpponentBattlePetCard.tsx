@@ -7,7 +7,7 @@ interface PetType {
 }
 
 interface OpponentBattlePet {
-    _id: string,
+    _id?: string,
     currentHealthPoints?: number,
     maxHealthPoints?: number,
     name: string,
@@ -52,7 +52,7 @@ function OpponentBattlePetCard({ opponentBattlePet }: Props) {
 
         <div className="card w-[25rem] mx-auto">
             <div style={{
-                backgroundImage: `url(${petType?.imageURL ? petType.imageURL : ''})`,
+                backgroundImage: `${opponentBattlePet.imageURL ? `url(${opponentBattlePet.imageURL})` : `url(${petType?.imageURL ? petType.imageURL : ''})`}`,
                 height: '10rem',
                 width: '10rem',
                 backgroundSize: 'cover',

@@ -19,7 +19,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
             return res.status(400).json({ msg: "Invalid Authentication!" })
         }
 
-        const { id, maxHealthPoints, maxMagicPoints, name, attackPoints, defensePoints, agilityPoints, level, experienceGranted, petType }: any = req.body;
+        const { id, maxHealthPoints, maxMagicPoints, name, attackPoints, defensePoints, agilityPoints, level, imageURL, experienceGranted, petType }: any = req.body;
         let opponentPet = await OpponentBattlePet.findByIdAndUpdate(id, {
             currentHealthPoints: maxHealthPoints,
             currentMagicPoints: maxMagicPoints,
@@ -30,6 +30,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
             defensePoints: defensePoints,
             agilityPoints: agilityPoints,
             level: level,
+            imageURL: imageURL,
             experienceGranted: experienceGranted,
             petType: petType
         }, { new: true });

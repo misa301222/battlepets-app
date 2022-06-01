@@ -12,6 +12,22 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
         let petTypes = await PetType.find({});
         res.json(petTypes);
     }
+
+    if (req.method === 'POST') {
+        const session = await getSession({ req });
+        if (!session) {
+            return res.status(400).json({ msg: "Invalid Authentication!" })
+        }
+
+        const { name, imageURL } = req.body;
+        let petType = new PetType({
+            petTypeName: name,
+            imageURL: imageURL
+        });
+
+        let status = await petType.save();
+        res.status(201).json({ message: 'Pet Type Created!', ...status, isOk: true })
+    }
 }
 
 export default handler;

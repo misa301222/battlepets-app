@@ -21,6 +21,21 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
         let status = await pet.save();
         res.status(201).json({ message: 'Pet created', ...status, isOk: true });
     }
+
+    if (req.method === 'PUT') {
+        const session = await getSession({ req });
+        if (!session) {
+            return res.status(400).json({ msg: "Invalid Authentication!" })
+        }
+
+        const { id, name, imageURL } = req.body;
+        let pet = await Pet.findByIdAndUpdate(id, {
+            name: name,
+            imageURL: imageURL
+        });
+
+        res.status(201).json({ isOk: true, pet });
+    }
 }
 
 export default handler;

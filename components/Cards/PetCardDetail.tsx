@@ -57,7 +57,7 @@ function PetCardDetail({ pet }: Props) {
     return (
         <div className="card w-[25rem] mx-auto">
             <div style={{
-                backgroundImage: `url(${petType?.imageURL ? petType.imageURL : ''})`,
+                backgroundImage: `${pet.imageURL ? `url(${pet.imageURL})` : `url(${petType?.imageURL ? petType.imageURL : ''})`}`,
                 height: '10rem',
                 width: '10rem',
                 backgroundSize: 'cover',

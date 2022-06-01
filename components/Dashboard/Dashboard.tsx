@@ -1,4 +1,4 @@
-import { faHeartPulse, faHippo, faPaw, faRadiationAlt, faShieldCat, faStar } from "@fortawesome/free-solid-svg-icons";
+import { faDog, faHeartPulse, faHippo, faPaw, faPencilAlt, faRadiationAlt, faShieldCat, faStar } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
@@ -104,17 +104,32 @@ function Dashboard({ data }: any) {
                 <hr />
             </div>
 
-            <div className="">
+            <motion.div
+                initial={{
+                    opacity: 0,
+                    translateX: -100
+                }}
+                animate={{
+                    opacity: 1,
+                    translateX: 0,
+                    transition: {
+                        duration: 1.2,
+                        type: 'spring',
+                        delay: 0.3
+                    }
+                }}
+                className="">
                 <div className="w-3/5 mx-auto mb-10 p-5 bg-gray-200 shadow-md shadow-black rounded-md">
-                    <h4 className="text-center">Actions</h4>
+                    <h4 className="text-center mb-5">Actions</h4>
                     <div className="flex flex-row gap-5">
                         <button type="button" onClick={() => router.push('/createPet')} className="btn-primary text-black"><FontAwesomeIcon icon={faHippo} /> Create Pet</button>
                         <button type="button" onClick={() => router.push('/')} className="btn-secondary"><FontAwesomeIcon icon={faHeartPulse} /> Adopt Pet</button>
                         <button type="button" onClick={() => router.push('/')} className="btn-tertiary"><FontAwesomeIcon icon={faRadiationAlt} /> Leave In Adoption</button>
                         <button type="button" onClick={() => router.push('/deletePet')} className="btn-danger"><FontAwesomeIcon icon={faRadiationAlt} /> Delete Pet</button>
+                        <button type='button' onClick={() => router.push(`/customizePets`)} className="btn-dark"><FontAwesomeIcon icon={faPencilAlt} /> Customize</button>
                     </div>
                 </div>
-            </div>
+            </motion.div>
 
             <div className="w-10/12 mx-auto p-10 shadow-lg shadow-black">
                 <h2 className="text-center">Your Pets <FontAwesomeIcon icon={faPaw} /> </h2>
@@ -164,16 +179,18 @@ function Dashboard({ data }: any) {
                         <div className="p-2">
                             {selectedPet ?
                                 <div className="flex flex-row">
-                                    <div>
+                                    <div className="w-1/2">
                                         <PetCardFull pet={selectedPet} />
                                     </div>
-                                    <div>
+                                    <div className="w-1/2">
                                         <div className="p-5 h-1/2">
-                                            Content
+                                            
                                         </div>
 
-                                        <div className="p-5 h-1/2">
-                                            <button onClick={() => router.push(`/viewPet/${selectedPet._id}`)} type="button" className="btn-primary">Go to Pet Page!</button>
+                                        <div className="p-5 h-1/2 w-full">
+                                            <div className="flex flex-row justify-center">
+                                                <button onClick={() => router.push(`/viewPet/${selectedPet._id}`)} type="button" className="btn-dark"><FontAwesomeIcon icon={faDog} /> Go to Pet Page!</button>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>

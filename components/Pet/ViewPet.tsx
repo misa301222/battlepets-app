@@ -54,7 +54,7 @@ function ViewPet({ data }: any) {
                 className="flex flex-row w-4/5 card p-5 mx-auto mt-10">
                 <div className="w-1/2"
                     style={{
-                        backgroundImage: `url(${petType.imageURL})`,
+                        backgroundImage: `${pet.imageURL ? `url(${pet.imageURL})` : `url(${petType?.imageURL ? petType.imageURL : ''})`}`,
                         backgroundSize: 'cover',
                         boxSizing: 'border-box',
                         // width: '30rem',

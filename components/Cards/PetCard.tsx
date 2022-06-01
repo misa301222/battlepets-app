@@ -8,10 +8,10 @@ interface PetType {
 
 interface Pet {
     _id: string,
-    userId: string,
+    userId?: string,
     currentHealthPoints?: number,
     maxHealthPoints?: number,
-    name: string,
+    name?: string,
     attackPoints?: number,
     defensePoints?: number,
     agilityPoints?: number,
@@ -24,9 +24,9 @@ interface Pet {
     wins?: number,
     defeats?: number,
     draws?: number,
-    petType: string,
-    position: number,
-    experience: number
+    petType?: string,
+    position?: number,
+    experience?: number
 }
 
 async function getTypeById(id: string) {
@@ -49,7 +49,7 @@ function PetCard({ pet }: Props) {
     const [petType, setPetType] = useState<PetType>();;
 
     useEffect(() => {
-        getTypeById(pet.petType).then(response => {
+        getTypeById(pet.petType!).then(response => {
             setPetType(response);
         });
     }, [pet])
@@ -57,7 +57,7 @@ function PetCard({ pet }: Props) {
     return (
         <div className="card w-[25rem] mx-auto">
             <div style={{
-                backgroundImage: `url(${petType?.imageURL ? petType.imageURL : ''})`,
+                backgroundImage: `${pet.imageURL ? `url(${pet.imageURL})` : `url(${petType?.imageURL ? petType.imageURL : ''})`}`,
                 height: '10rem',
                 width: '10rem',
                 backgroundSize: 'cover',

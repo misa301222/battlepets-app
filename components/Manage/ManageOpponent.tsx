@@ -72,6 +72,7 @@ async function updateOpponentBattlePet(opponentBattlePet: OpponentBattlePet) {
             defensePoints: opponentBattlePet.defensePoints,
             agilityPoints: opponentBattlePet.agilityPoints,
             level: opponentBattlePet.level,
+            imageURL: opponentBattlePet.imageURL,
             experienceGranted: opponentBattlePet.experienceGranted,
             petType: opponentBattlePet.petType
         }))
@@ -94,6 +95,7 @@ function ManageOpponent({ data }: any) {
         agilityPoints: 0,
         maxMagicPoints: 0,
         level: 0,
+        imageURL: '',
         experienceGranted: 0,
         petType: ''
     });
@@ -153,6 +155,10 @@ function ManageOpponent({ data }: any) {
 
     const handleOnChangeLevelPoints = (event: ChangeEvent<HTMLInputElement>) => {
         setSelectedOpponentBattlePet(prev => ({ ...prev, level: Number(event.target.value) }))
+    }
+
+    const handleOnChangeImageURL = (event: ChangeEvent<HTMLInputElement>) => {
+        setSelectedOpponentBattlePet(prev => ({ ...prev, imageURL: event.target.value }));
     }
 
     const handleOnChangeExperienceGrantedPoints = (event: ChangeEvent<HTMLInputElement>) => {
@@ -264,6 +270,11 @@ function ManageOpponent({ data }: any) {
                             <div className="mb-6">
                                 <h5>Level</h5>
                                 <input value={selectedOpponentBattlePet.level} type={'number'} onChange={handleOnChangeLevelPoints} className="form-control text-center" />
+                            </div>
+
+                            <div className="mb-6">
+                                <h5>Image URL</h5>
+                                <input value={selectedOpponentBattlePet.imageURL} type={'text'} onChange={handleOnChangeImageURL} className="form-control text-center" />
                             </div>
 
                             <div className="mb-6">
