@@ -176,7 +176,7 @@ function FightOpponent({ data }: any) {
                 if (isDefended) {
                     message += ` Opponent blocked All damage for this turn!`;
                 } else {
-                    message += ` But it didn't work >:)!`;
+                    message += `Defense! But it didn't work >:)!`;
                 }
                 break;
 
