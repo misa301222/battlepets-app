@@ -37,11 +37,19 @@ function UserCard({ user, userProfile }: Props) {
             <div className="flex flex-row h-full">
                 <div className="w-1/3 flex justify-center items-center">
                     <Link href={`/seeUserProfile/${user.email}`}>
-                        <motion.img
+                        <motion.div
                             whileHover={{
                                 scale: 1.1
                             }}
-                            src={user.imageURL} className='w-44 h-44 rounded-full mx-auto cursor-pointer bg-cover bg-center' />
+                            style={{
+                                backgroundImage: `url(${user.imageURL})`,
+                                width: '11rem',
+                                height: '11rem',
+                                backgroundSize: 'cover',
+                                backgroundPosition: 'center',
+                                borderRadius: '50%',
+                                cursor: 'pointer'
+                            }} />
                     </Link>
                 </div>
 

@@ -1,12 +1,14 @@
-import { faDove, faFloppyDisk } from "@fortawesome/free-solid-svg-icons";
+import { faArrowRightRotate, faDove, faFloppyDisk, faShieldCat } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { SyntheticEvent, useState } from "react";
+import { ChangeEvent, SyntheticEvent, useState } from "react";
 import { motion } from 'framer-motion';
 import Swal from "sweetalert2";
+import { Modal } from "react-daisyui";
 
 interface PetType {
     _id: string,
     petTypeName: string,
+    petTypeDescription: string,
     imageURL: string
 }
 
@@ -17,6 +19,24 @@ async function savePetType(name: string, imageURL: string) {
             'Content-Type': 'application/json',
         },
         body: (JSON.stringify({ name, imageURL }))
+    });
+
+    const data = await response.json();
+    return data;
+}
+
+async function updatePetType(selectedPetType: PetType) {
+    const response = await fetch(`/api/petTypesAPI/`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: (JSON.stringify({
+            editedPetType: {
+                _id: selectedPetType._id, petTypeName: selectedPetType.petTypeName,
+                petTypeDescription: selectedPetType.petTypeDescription, imageURL: selectedPetType.imageURL
+            }
+        }))
     });
 
     const data = await response.json();
@@ -39,6 +59,25 @@ function ManagePetTypes({ data }: any) {
     const [petTypes, setPetTypes] = useState<PetType[]>(data.petTypes as PetType[]);
     const [typeName, setTypeName] = useState<string>();
     const [imageURL, setImageURL] = useState<string>();
+    const [isOpen, setIsOpen] = useState<boolean>(false);
+    const [selectedPetType, setSelectedPetType] = useState<PetType>({
+        _id: '',
+        petTypeName: '',
+        petTypeDescription: '',
+        imageURL: ''
+    });
+
+    const handleOnChangePetTypeName = (event: ChangeEvent<HTMLInputElement>) => {
+        setSelectedPetType(prev => ({ ...prev, petTypeName: event.target.value }))
+    }
+
+    const handleOnChangePetTypeDescription = (event: ChangeEvent<HTMLTextAreaElement>) => {
+        setSelectedPetType(prev => ({ ...prev, petTypeDescription: event.target.value }))
+    }
+
+    const handleOnChangeImageURL = (event: ChangeEvent<HTMLInputElement>) => {
+        setSelectedPetType(prev => ({ ...prev, imageURL: event.target.value }))
+    }
 
     const handleOnSubmitSavePetTypeForm = async (event: SyntheticEvent) => {
         event.preventDefault();
@@ -56,6 +95,28 @@ function ManagePetTypes({ data }: any) {
                 setPetTypes(responsePets);
             });
         }
+    }
+
+    const handleOnClickSelectPetType = (element: PetType) => {
+        setSelectedPetType(element);
+        setIsOpen(true);
+    }
+
+    const handleOnSubmitUpdatePetTypeForm = async (event: SyntheticEvent) => {
+        event.preventDefault();
+
+        const response = await updatePetType(selectedPetType);
+        console.log(response);
+        Swal.fire({
+            position: 'center',
+            icon: 'success',
+            title: 'Pet Type Updated!',
+            showConfirmButton: false,
+            timer: 800
+        }).then(async () => {
+            const responsePets = await getPetTypes();
+            setPetTypes(responsePets);
+        });
     }
 
     return (
@@ -88,6 +149,7 @@ function ManagePetTypes({ data }: any) {
                     {
                         petTypes.map((element: PetType, index: number) => (
                             <motion.div
+                                onClick={() => handleOnClickSelectPetType(element)}
                                 key={index}
                                 whileHover={{
                                     scale: 1.2
@@ -109,6 +171,41 @@ function ManagePetTypes({ data }: any) {
                         ))
                     }
                 </div>
+            </div>
+
+            <div>
+                <Modal className="text-black bg-white max-w-[60rem] max-h-full" open={isOpen} onClickBackdrop={() => setIsOpen(false)}>
+                    <Modal.Header><h5> Pet Type Information <FontAwesomeIcon icon={faShieldCat} /> </h5></Modal.Header>
+
+                    <Modal.Body>
+                        <div className="p-2">
+                            <form onSubmit={handleOnSubmitUpdatePetTypeForm} className="mx-auto mt-5">
+                                <div className="mb-3">
+                                    <h5>Type Name<span className="text-red-600">*</span></h5>
+                                    <input value={selectedPetType.petTypeName} onChange={handleOnChangePetTypeName} className="form-control" />
+                                </div>
+
+                                <div className="mb-3">
+                                    <h5>Description</h5>
+                                    <textarea value={selectedPetType.petTypeDescription} onChange={handleOnChangePetTypeDescription} rows={4} className="form-control resize-none" />
+                                </div>
+
+                                <div className="mb-10">
+                                    <h5>Image URL<span className="text-red-600">*</span></h5>
+                                    <input value={selectedPetType.imageURL} onChange={handleOnChangeImageURL} className="form-control" />
+                                </div>
+
+                                <div className="mb-3 flex flex-row justify-center">
+                                    <button disabled={!selectedPetType.petTypeName || !selectedPetType.imageURL} className="btn-primary w-36" type="submit"><FontAwesomeIcon icon={faArrowRightRotate} /> Update</button>
+                                </div>
+                            </form>
+                        </div>
+                    </Modal.Body>
+
+                    <Modal.Actions>
+
+                    </Modal.Actions>
+                </Modal>
             </div>
         </div>
     )

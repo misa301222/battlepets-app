@@ -8,6 +8,10 @@ const petTypeSchema = new mongoose.Schema({
     imageURL: {
         type: String,
         default: ''
+    },
+    petTypeDescription: {
+        type: String,
+        default: ''
     }
 }, { timestamps: true });
 
