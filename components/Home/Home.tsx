@@ -172,13 +172,14 @@ function Home({ data }: any) {
                         <div className="p-2">
                             <div className="flex flex-row">
                                 <div className="w-1/2 p-5">
-                                    <div style={{
-                                        backgroundImage: `url(${selectedType?.imageURL})`,
-                                        width: '20rem',
-                                        height: '30rem',
-                                        backgroundSize: 'cover',
-                                        backgroundPosition: 'center'
-                                    }} />
+                                    <div
+                                        style={{
+                                            backgroundImage: `url(${selectedType?.imageURL})`,
+                                            width: '20rem',
+                                            height: '30rem',
+                                            backgroundSize: 'cover',
+                                            backgroundPosition: 'center'
+                                        }} />
                                 </div>
 
                                 <div className="w-1/2">

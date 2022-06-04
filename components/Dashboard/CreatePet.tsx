@@ -98,7 +98,7 @@ function CreatePet({ data }: any) {
             const responsePet = await createNewPet(newPet.userId, newPet.name, newPet.petType, newPet.position);
             if (responsePet.isOk) {
                 Swal.fire({
-                    position: 'top-right',
+                    position: 'center',
                     icon: 'success',
                     title: 'Pet Created!',
                     showConfirmButton: true,
@@ -112,14 +112,13 @@ function CreatePet({ data }: any) {
 
     return (
         <div>
-            {JSON.stringify(data)}
             <div className="container mx-auto p-5 mb-10 mt-10">
                 <h1 className="header">Create Pet! <FontAwesomeIcon icon={faShieldCat} /></h1>
                 <hr />
             </div>
 
-            <form onSubmit={handleOnSubmitFormCreatePet}>
-                <div className="flex flex-wrap gap-10 w-3/5 ml-20">
+            <form onSubmit={handleOnSubmitFormCreatePet} className='w-full'>
+                <div className="flex flex-wrap justify-center gap-10 w-1/2 mx-auto">
                     {
                         petTypes.map((element: PetType, index: number) => (
                             <motion.div
@@ -138,6 +137,7 @@ function CreatePet({ data }: any) {
                                     height: '10rem',
                                     width: '10rem',
                                     backgroundSize: 'cover',
+                                    backgroundPosition: 'center',
                                     borderRadius: '1.3rem',
                                     margin: '0 auto',
                                 }}
