@@ -1,4 +1,4 @@
-import { faCogs, faDove, faUserEdit, faUserNinja } from "@fortawesome/free-solid-svg-icons";
+import { faCogs, faDove, faStore, faUserEdit, faUserNinja } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { motion } from 'framer-motion';
 import { useSession } from "next-auth/react";
@@ -53,6 +53,16 @@ function Settings() {
                                 className="card text-center cursor-pointer">
                                 <FontAwesomeIcon icon={faDove} className='text-[5rem]' />
                                 <h5 className="mt-5">Manage Pet Types</h5>
+                            </motion.div>
+
+                            <motion.div
+                                whileHover={{
+                                    scale: 1.1
+                                }}
+                                onClick={() => router.push('/manage/manageStores')}
+                                className="card text-center cursor-pointer">
+                                <FontAwesomeIcon icon={faStore} className='text-[5rem]' />
+                                <h5 className="mt-5">Manage Stores</h5>
                             </motion.div>
                         </div>
                     </div>

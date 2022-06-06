@@ -1,4 +1,4 @@
-import { faAddressCard, faGears, faRightFromBracket, faSearch, faShieldCat, faStar, faUserNinja } from "@fortawesome/free-solid-svg-icons";
+import { faAddressCard, faGears, faRightFromBracket, faSearch, faShieldCat, faShop, faStar, faUserNinja } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Menu, Transition } from "@headlessui/react";
 import { signOut, useSession } from "next-auth/react";
@@ -70,6 +70,21 @@ function NavigationBar() {
                                             }}
                                             className="cursor-pointer hover:text-amber-400">
                                             <FontAwesomeIcon icon={faUserNinja} /> Battle</motion.h5>
+                                    </Link>
+                                </div>
+                            )
+                        }
+
+{
+                            session && (
+                                <div>
+                                    <Link href={'/viewStores'}>
+                                        <motion.h5
+                                            whileHover={{
+                                                scale: 1.1
+                                            }}
+                                            className="cursor-pointer hover:text-amber-400">
+                                            <FontAwesomeIcon icon={faShop} /> Stores</motion.h5>
                                     </Link>
                                 </div>
                             )
