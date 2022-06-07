@@ -13,5 +13,5 @@ const storeItemSchema = new mongoose.Schema({
     }
 }, { timestamps: true });
 
-let StoreItem = mongoose.models.storeItems || mongoose.model('storeItems', storeItemSchema);
+let StoreItem = mongoose.models.storeitems || mongoose.model('storeitems', storeItemSchema);
 export default StoreItem;
