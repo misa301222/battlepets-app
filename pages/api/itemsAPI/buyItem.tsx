@@ -45,8 +45,23 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
                 { new: true }
             );
 
-            res.status(201).json(updatedItem);
+            return res.status(201).json(updatedItem);
         }
+
+        const newItem = new UserItem({
+            userId: user._id,
+            itemId: item._id,
+            quantity: quantity
+        });
+
+        const updatedStoreItem = await StoreItem.findByIdAndUpdate(
+            storeItem._id,
+            { quantity: storeItem.quantity -= quantity },
+            { new: true }
+        );
+
+        const status = await newItem.save();
+        res.status(201).json({ isOk: true, ...status })
     }
 }
 

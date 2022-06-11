@@ -36,6 +36,18 @@ async function buyItem(storeId: string, selectedItem: Items, quantity: number) {
     return data;
 }
 
+async function getItemsByStoreId(storeId: string) {
+    const response = await fetch(`/api/storeItemsAPI/getItemsByStoreId/${storeId}`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+        }
+    });
+
+    const data = await response.json();
+    return data;
+}
+
 function ViewStore({ data }: any) {
     const [store, setStore] = useState<Store>(data.store as Store);
     const [items, setItems] = useState<Items[]>(data.items as Items[]);
@@ -57,18 +69,18 @@ function ViewStore({ data }: any) {
     }
 
     const handleOnSubmitBuyForm = async (event: SyntheticEvent) => {
-        event.preventDefault();
-
+        event.preventDefault();        
         const response = await buyItem(store._id, selectedItem, quantity);
-        console.log(response);
+        setIsOpen(false);
         Swal.fire({
             position: 'center',
             icon: 'success',
             title: 'Item Bought Successfully!',
             showConfirmButton: false,
             timer: 800
-        }).then(() => {
-
+        }).then(async () => {
+            const response = await getItemsByStoreId(store._id);
+            setItems(response);
         });
     }
 

@@ -19,27 +19,16 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
             itemId: ObjectId(item)
         }).lean();
 
-        if (storeItem) {
-            storeItem.quantity += quantity;
+        storeItem.quantity -= quantity;
 
-            const updatedItem = await StoreItem.findByIdAndUpdate(
-                storeItem._id,
-                storeItem,
-                { new: true }
-            );
+        const updatedItem = await StoreItem.findByIdAndUpdate(
+            storeItem._id,
+            storeItem,
+            { new: true }
+        );
 
-            return res.status(201).json(updatedItem);
-        }
-
-        const newItem = new StoreItem({
-            storeId: storeId,
-            itemId: item,
-            quantity: quantity
-        });
-
-        const status = await newItem.save();
-        res.status(201).json({ isOk: true, ...status });
+        res.status(201).json(updatedItem);
     }
 }
 
-export default handler; 
+export default handler;

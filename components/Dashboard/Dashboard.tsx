@@ -33,6 +33,11 @@ interface Pet {
     experience: number
 }
 
+interface Currency {
+    userId: string,
+    currency: number
+}
+
 async function healAllPets(email: string) {
     const response = await fetch(`/api/petAPI/healAllPets/${email}`, {
         method: 'GET',
@@ -62,6 +67,7 @@ function Dashboard({ data }: any) {
     const { data: session, status } = useSession();
     const router = useRouter();
     const [pets, setPets] = useState<Pet[]>(data.pets as Pet[]);
+    const [currency, setCurrency] = useState<Currency>(data.currency as Currency);
     const [isOpen, setIsOpen] = useState<boolean>(false)
     const [selectedPet, setSelectedPet] = useState<Pet>();
 
@@ -101,6 +107,10 @@ function Dashboard({ data }: any) {
             <div className="container mx-auto p-5 mb-5 mt-10">
                 <h1 className="header">Dashboard <FontAwesomeIcon icon={faShieldCat} /></h1>
                 <hr />
+            </div>
+
+            <div className="mt-2 mb-10 w-2/3 mx-auto">
+                <h3 className="text-right underline">Current Money: ${currency.currency}</h3>
             </div>
 
             <motion.div

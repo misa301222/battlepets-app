@@ -1,4 +1,4 @@
-import { faBook, faStore } from "@fortawesome/free-solid-svg-icons";
+import { faBook, faFloppyDisk, faStore } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { SyntheticEvent, useState } from "react";
 import { motion } from 'framer-motion';
@@ -28,6 +28,7 @@ interface StoreItem {
 }
 
 interface Items {
+    _id?: string,
     itemName: string,
     itemDescription: string,
     itemPrice: number,
@@ -49,13 +50,26 @@ async function getStoreItemsByStoreId(storeId: string) {
     return data;
 }
 
-async function addItemStore(storeId: string, selectedItem: Items, quantity: number) {
+async function addItemStore(storeId: string, itemId: string, quantity: number) {
     const response = await fetch(`/api/itemsAPI/addItemsStore/`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ storeId: storeId, item: selectedItem, quantity: quantity })
+        body: JSON.stringify({ storeId: storeId, item: itemId, quantity: quantity })
+    });
+
+    const data = await response.json();
+    return data;
+}
+
+async function removeItemStore(storeId: string, itemId: string, quantity: number) {
+    const response = await fetch(`/api/itemsAPI/removeItemsStore/`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ storeId: storeId, item: itemId, quantity: quantity })
     });
 
     const data = await response.json();
@@ -68,15 +82,7 @@ function ManageItems({ data }: any) {
     const [selectedStore, setSelectedStore] = useState<string>('');
     const [isOpen, setIsOpen] = useState<boolean>(false);
     const [storeItems, setStoreItems] = useState<Items[]>();
-    const [selectedItem, setSelectedItem] = useState<Items>({
-        itemName: '',
-        itemDescription: '',
-        itemPrice: 0,
-        itemRarity: 0,
-        itemType: '',
-        imageURL: '',
-        itemQuantity: 0
-    });
+    const [selectedItem, setSelectedItem] = useState<string>('');    
     const [action, setAction] = useState<String>();
     const [quantity, setQuantity] = useState<number>(0);
 
@@ -90,7 +96,7 @@ function ManageItems({ data }: any) {
 
     const handleOnSubmitFormItems = async (event: SyntheticEvent) => {
         event.preventDefault();
-
+        console.log(selectedItem);
         switch (action) {
             case 'ADD':
                 const responseItem = await addItemStore(selectedStore, selectedItem, quantity);
@@ -98,8 +104,13 @@ function ManageItems({ data }: any) {
                 break;
 
             case 'REMOVE':
+                const responseItemRemove = await removeItemStore(selectedStore, selectedItem, quantity);
+                console.log(responseItemRemove);
                 break;
         }
+
+        const response = await getStoreItemsByStoreId(selectedStore);
+        setStoreItems(response);
     }
 
     return (
@@ -154,10 +165,10 @@ function ManageItems({ data }: any) {
                                 <div className="mb-5">
                                     <h5>Items</h5>
                                     <div className="flex flex-row justify-evenly">
-                                        <select className="form-control">
+                                        <select className="form-control" onChange={(e) => setSelectedItem(e.target.value)}>
                                             {
                                                 items?.map((element: Items, index: number) => (
-                                                    <option key={index}>{element.itemName}</option>
+                                                    <option key={index} value={element._id}>{element.itemName}</option>
                                                 ))
                                             }
                                         </select>
@@ -179,7 +190,7 @@ function ManageItems({ data }: any) {
                                 </div>
 
                                 <div className="mb-5 flex flex-row justify-center">
-                                    <button type="submit" className="btn-primary"> Apply </button>
+                                    <button type="submit" className="btn-primary"><FontAwesomeIcon icon={faFloppyDisk} /> Apply </button>
                                 </div>
                             </form>
                             <div className="flex flex-wrap w-1/2 mx-auto gap-10">
@@ -190,7 +201,12 @@ function ManageItems({ data }: any) {
                                             whileHover={{
                                                 scale: 1.1
                                             }}
-                                            onClick={() => setSelectedItem(element)}>
+                                            // onClick={() => setSelectedItem(element)}
+                                            // style={{
+                                            //     borderWidth: `${selectedItem._id === element._id ? '4px' : '0rem'}`,
+                                            //     borderColor: `${selectedItem._id === element._id ? 'red' : 'none'}`
+                                            // }}
+                                            >
                                             <div className="flex flex-col">
                                                 <h5 className="text-center mb-1">{element.itemName}</h5>
                                                 <div
