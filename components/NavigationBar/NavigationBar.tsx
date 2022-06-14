@@ -1,4 +1,4 @@
-import { faAddressCard, faBookOpen, faGears, faRightFromBracket, faSearch, faShieldCat, faShop, faStar, faUserNinja } from "@fortawesome/free-solid-svg-icons";
+import { faAddressCard, faBookOpen, faGamepad, faGears, faRightFromBracket, faSearch, faShieldCat, faShop, faStar, faUserNinja } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Menu, Transition } from "@headlessui/react";
 import { signOut, useSession } from "next-auth/react";
@@ -89,6 +89,21 @@ function NavigationBar() {
                                 </div>
                             )
                         }
+
+                        {
+                            session && (
+                                <div>
+                                    <Link href={'/games'}>
+                                        <motion.h5
+                                            whileHover={{
+                                                scale: 1.1
+                                            }}
+                                            className="cursor-pointer hover:text-amber-400">
+                                            <FontAwesomeIcon icon={faGamepad} /> Games</motion.h5>
+                                    </Link>
+                                </div>
+                            )
+                        }
                     </div>
                 </div>
             </div>
@@ -107,7 +122,7 @@ function NavigationBar() {
                     </div>)
             }
 
-{
+            {
                 session && (
                     <div className="mr-4">
                         <Link href={'/inventory'}>
