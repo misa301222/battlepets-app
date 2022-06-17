@@ -1,10 +1,11 @@
-import { faBookOpen, faBowlFood } from "@fortawesome/free-solid-svg-icons";
+import { faBookOpen, faBowlFood, faPlusCircle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useState } from "react";
+import { SyntheticEvent, useState } from "react";
 import { motion } from 'framer-motion';
 import { Modal } from "react-daisyui";
 
 interface Items {
+    _id: string,
     itemName: string,
     itemDescription: string,
     itemPrice: number,
@@ -14,10 +15,49 @@ interface Items {
     itemQuantity?: number
 }
 
+interface Pet {
+    _id: string,
+    userId: string,
+    currentHealthPoints?: number,
+    maxHealthPoints?: number,
+    name: string,
+    attackPoints?: number,
+    defensePoints?: number,
+    agilityPoints?: number,
+    currentMagicPoints?: number,
+    maxMagicPoints?: number,
+    availableAttacks?: string[],
+    level?: number,
+    imageURL?: string,
+    customImageURL?: string,
+    wins?: number,
+    defeats?: number,
+    draws?: number,
+    petType: string,
+    position: number,
+    experience: number,
+    experienceGranted?: number
+}
+
+async function removeQuantity(quantity: number, itemId: string) {
+    const response = await fetch(`/api/itemsAPI/removeItemFromUser/`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ quantity, itemId })
+    });
+
+    const data = await response.json();
+    return data;
+}
+
 function Inventory({ data }: any) {
+    const [pets, setPets] = useState<Pet[]>(data.pets as Pet[]);
     const [items, setItems] = useState<Items[]>(data.items as Items[]);
     const [isOpen, setIsOpen] = useState<boolean>(false);
     const [selectedItem, setSelectedItem] = useState<Items>({
+        _id: '',
         itemName: '',
         itemDescription: '',
         itemPrice: 0,
@@ -26,11 +66,24 @@ function Inventory({ data }: any) {
         imageURL: '',
         itemQuantity: 0
     });
+    const [action, setAction] = useState<string>('');
 
     const handleOnClickSelectItem = (element: Items) => {
         setIsOpen(true);
         setSelectedItem(element);
     }
+
+    const handleOnSubmitItemForm = async (event: SyntheticEvent) => {
+        event.preventDefault();
+
+        if (action === '-1') {
+            const response = await removeQuantity(1, selectedItem._id);
+            return;
+        }
+        
+        //do the sum to hp here
+    }
+
     return (
         <div>
             <div className="container mx-auto p-5 mb-10 mt-10">
@@ -105,8 +158,21 @@ function Inventory({ data }: any) {
                                     <div className="mb-10">
                                         <h2>What do you want to do?</h2>
                                     </div>
-                                    <form>
-                                        actions
+                                    <form onSubmit={handleOnSubmitItemForm}>
+                                        <div className="mb-5">
+                                            <select onChange={(e) => setAction(e.target.value)} className="form-control font-bold">
+                                                <option value={''}>Select an Action</option>
+                                                {
+                                                    pets.map((element: Pet, index: number) => (
+                                                        <option value={element._id} key={index}>Give Item to {element.name}</option>
+                                                    ))
+                                                }
+                                                <option value={'-1'}>Throw item</option>
+                                            </select>
+                                        </div>
+                                        <div className="flex flex-row justify-center">
+                                            <button type="submit" className="btn-primary"><FontAwesomeIcon icon={faPlusCircle} /> Accept</button>
+                                        </div>
                                     </form>
                                 </div>
                             </div>
