@@ -11,17 +11,23 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 
         const { id, quantity } = req.body;
 
-        let pet: any = await Pet.findByIdAndUpdate(
-            id,
-            {
-                $inc: {
-                    currentHealthPoints: quantity
-                }
-            },
-            { new: true }
-        );
+        let pet = await Pet.findById(id).lean();
+        pet.currentHealthPoints = pet.currentHealthPoints + quantity > pet.maxHealthPoints ? pet.maxHealthPoints : pet.currentHealthPoints + quantity;
+        let newPet = await Pet.findByIdAndUpdate(id,
+            pet,
+            { new: true });
 
-        res.status(201).json(pet);
+        // let pet: any = await Pet.findByIdAndUpdate(
+        //     id,
+        //     {
+        //         $inc: {
+        //             currentHealthPoints: quantity
+        //         }
+        //     },
+        //     { new: true }
+        // );
+
+        res.status(201).json({ isOk: true, ...newPet });
     }
 }
 

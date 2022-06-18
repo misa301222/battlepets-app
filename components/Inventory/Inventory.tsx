@@ -3,6 +3,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { SyntheticEvent, useState } from "react";
 import { motion } from 'framer-motion';
 import { Modal } from "react-daisyui";
+import Swal from "sweetalert2";
+import { useSession } from "next-auth/react";
 
 interface Items {
     _id: string,
@@ -52,7 +54,33 @@ async function removeQuantity(quantity: number, itemId: string) {
     return data;
 }
 
+async function getItemsByEmail(email: string) {
+    const response = await fetch(`/api/userItemsAPI/getItemsByEmail/${email}`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+        }
+    });
+
+    const data = await response.json();
+    return data;
+}
+
+async function healPet(id: string, quantity: number) {
+    const response = await fetch(`/api/petAPI/healPet/`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ id, quantity })
+    });
+
+    const data = await response.json();
+    return data;
+}
+
 function Inventory({ data }: any) {
+    const { data: session, status } = useSession();
     const [pets, setPets] = useState<Pet[]>(data.pets as Pet[]);
     const [items, setItems] = useState<Items[]>(data.items as Items[]);
     const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -78,10 +106,42 @@ function Inventory({ data }: any) {
 
         if (action === '-1') {
             const response = await removeQuantity(1, selectedItem._id);
+            if (!response.isOk) {
+                Swal.fire({
+                    position: 'center',
+                    icon: 'warning',
+                    title: response.message,
+                    showConfirmButton: true
+                });
+            }
             return;
         }
-        
+
         //do the sum to hp here
+        const quantity: number = selectedItem.itemRarity;
+        const response = await removeQuantity(1, selectedItem._id);
+        if (!response.isOk) {
+            Swal.fire({
+                position: 'center',
+                icon: 'warning',
+                title: response.message,
+                showConfirmButton: true
+            });
+            return;
+        }
+        const responseHeal = await healPet(action, quantity);
+        if (responseHeal.isOk) {
+            setIsOpen(false);
+            Swal.fire({
+                position: 'center',
+                icon: 'success',
+                title: `Pet healed ${quantity} HP!`,
+                showConfirmButton: true
+            }).then(async () => {
+                const responseItems = await getItemsByEmail(session!.user?.email!);
+                setItems(responseItems);
+            });
+        }
     }
 
     return (

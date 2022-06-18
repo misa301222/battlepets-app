@@ -23,15 +23,19 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
             itemId: ObjectId(itemId)
         }).lean();
 
-        userItem.quantity -= quantity;
+        if (userItem.quantity > 0) {
+            userItem.quantity -= quantity;
 
-        let newUserItem = await UserItem.findByIdAndUpdate(
-            userItem._id,
-            userItem,
-            { new: true }
-        )
+            let newUserItem = await UserItem.findByIdAndUpdate(
+                userItem._id,
+                userItem,
+                { new: true }
+            )
 
-        res.status(201).json(newUserItem);
+            return res.status(201).json({ isOk: true, ...newUserItem });
+        } else {
+            return res.status(201).json({ message: 'YOU DONT HAVE ITEMS!', isOk: false })
+        }
     }
 }
 
