@@ -69,19 +69,28 @@ function ViewStore({ data }: any) {
     }
 
     const handleOnSubmitBuyForm = async (event: SyntheticEvent) => {
-        event.preventDefault();        
+        event.preventDefault();
         const response = await buyItem(store._id, selectedItem, quantity);
-        setIsOpen(false);
-        Swal.fire({
-            position: 'center',
-            icon: 'success',
-            title: 'Item Bought Successfully!',
-            showConfirmButton: false,
-            timer: 800
-        }).then(async () => {
-            const response = await getItemsByStoreId(store._id);
-            setItems(response);
-        });
+        if (response.isOk) {
+            setIsOpen(false);
+            Swal.fire({
+                position: 'center',
+                icon: 'success',
+                title: 'Item Bought Successfully!',
+                showConfirmButton: false,
+                timer: 800
+            }).then(async () => {
+                const response = await getItemsByStoreId(store._id);
+                setItems(response);
+            });
+        } else {
+            Swal.fire({
+                position: 'center',
+                icon: 'warning',
+                title: `${response.message}`,
+                showConfirmButton: true,
+            });
+        }
     }
 
     return (
@@ -215,7 +224,7 @@ function ViewStore({ data }: any) {
                                             <input onChange={(e) => setQuantity(Number(e.target.value))} className="form-control text-center" type={'number'} />
                                         </div>
                                         <div className="flex flex-row justify-center">
-                                            <button type="submit" className="btn-secondary"><FontAwesomeIcon icon={faMoneyBill} /> Buy!</button>
+                                            <button disabled={!(selectedItem.itemQuantity! >= quantity)} type="submit" className="btn-secondary"><FontAwesomeIcon icon={faMoneyBill} /> Buy!</button>
                                         </div>
                                     </form>
                                 </div>
