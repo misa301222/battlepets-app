@@ -1,4 +1,4 @@
-import { faDice, faGamepad } from "@fortawesome/free-solid-svg-icons";
+import { faDice, faGamepad, faQuestion } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { motion } from 'framer-motion';
 import { useRouter } from "next/router";
@@ -13,15 +13,25 @@ function Games() {
                 <hr />
             </div>
 
-            <div className="container mx-auto flex flex-wrap justify-center">
+            <div className="container mx-auto flex flex-wrap justify-center gap-10">
                 <motion.div
                     whileHover={{
                         scale: 1.1
                     }}
                     onClick={() => router.push('/games/doubleOrNothing')}
-                    className="card text-center cursor-pointer">
+                    className="card text-center cursor-pointer w-[12rem]">
                     <FontAwesomeIcon icon={faDice} className='text-[5rem]' />
                     <h5 className="mt-5">Double or Nothing</h5>
+                </motion.div>
+
+                <motion.div
+                    whileHover={{
+                        scale: 1.1
+                    }}
+                    onClick={() => router.push('/games/guess')}
+                    className="card text-center cursor-pointer w-[12rem]">
+                    <FontAwesomeIcon icon={faQuestion} className='text-[5rem]' />
+                    <h5 className="mt-5">Guess</h5>
                 </motion.div>
             </div>
         </div>
