@@ -110,7 +110,7 @@ function Dashboard({ data }: any) {
             </div>
 
             <div className="mt-2 mb-10 w-2/3 mx-auto">
-                <h3 className="text-right underline">Current Money: ${currency.currency}</h3>
+                <h3 className="text-right underline">Current Money: ${currency.currency.toLocaleString(undefined, { minimumFractionDigits: 2 })}</h3>
             </div>
 
             <motion.div
