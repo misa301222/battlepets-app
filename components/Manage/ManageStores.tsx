@@ -184,7 +184,7 @@ function ManageStores({ data }: any) {
                     <hr className="border-black" />
                 </div>
 
-                <div className="flex flex-wrap justify-center w-1/2 mx-auto">
+                <div className="flex flex-wrap justify-center w-1/2 mx-auto gap-10">
                     {
                         stores?.map((element: Store, index: number) => (
                             <motion.div
@@ -192,10 +192,18 @@ function ManageStores({ data }: any) {
                                 whileHover={{
                                     scale: 1.1
                                 }}
-                                className="h-[12rem] w-[12rem] card cursor-pointer"
+                                className="h-[15rem] w-[12rem] card cursor-pointer"
                                 onClick={() => handleOnChangeSelectStore(element)}>
                                 <div>
-                                    {element.storeName}
+                                    <h5 className="text-center mb-3">{element.storeName}</h5>
+                                    <div style={{
+                                        backgroundImage: `url(${element.imageURL})`,
+                                        height: '8rem',
+                                        width: '8rem',
+                                        margin: '0 auto',
+                                        backgroundSize: 'cover',
+                                        borderRadius: '0.5rem'
+                                    }} />
                                 </div>
                             </motion.div>
                         ))

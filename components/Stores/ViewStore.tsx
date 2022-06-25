@@ -176,7 +176,7 @@ function ViewStore({ data }: any) {
                                             borderRadius: '5px'
                                         }}
                                     />
-                                    <h3 className="text-center mt-10">Price: {element.itemPrice}$</h3>
+                                    <h4 className="text-center mt-10">Price: ${element.itemPrice.toLocaleString(undefined, { minimumFractionDigits: 2 })}</h4>
                                     <h4 className="underline text-center">{element.itemQuantity} left</h4>
                                 </div>
                             </motion.div>
@@ -209,7 +209,7 @@ function ViewStore({ data }: any) {
                                                 borderRadius: '5px'
                                             }}
                                         />
-                                        <h3 className="text-center mt-10">Price: {selectedItem.itemPrice}$</h3>
+                                        <h4 className="text-center mt-10">Price: ${selectedItem.itemPrice.toLocaleString(undefined, { minimumFractionDigits: 2 })}</h4>
                                         <h4 className="underline text-center">{selectedItem.itemQuantity} left</h4>
                                     </div>
                                 </motion.div>

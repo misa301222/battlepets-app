@@ -121,24 +121,24 @@ function Bank({ data }: any) {
             <div className="container mx-auto mt-20 flex flex-row justify-evenly">
                 <form onSubmit={handleOnSubmitDepositForm} className="card w-1/3">
                     <div className="mb-3">
-                        <h5 className="text-center">Deposit</h5>
+                        <h2 className="text-center">Deposit</h2>
                     </div>
 
                     <div className="mb-3">
                         <input onChange={(e) => setQuantityDeposit(Number(e.target.value))} type={'number'} className='form-control text-center' />
                     </div>
 
-                    <div className="mb-3 flex flex-row justify-center">
+                    <div className="mb-5 flex flex-row justify-center">
                         <button type="submit" className="btn-primary">Deposit</button>
                     </div>
                 </form>
 
                 <form onSubmit={handleOnSubmitWithdrawForm} className="card w-1/3">
                     <div className="mb-3">
-                        <h5 className="text-center">Withdraw</h5>
+                        <h2 className="text-center">Withdraw</h2>
                     </div>
 
-                    <div className="mb-3">
+                    <div className="mb-5">
                         <input onChange={(e) => setQuantityWithDraw(Number(e.target.value))} type={'number'} className='form-control text-center' />
                     </div>
 

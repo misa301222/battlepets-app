@@ -23,7 +23,7 @@ function ViewStores({ data }: any) {
                 <hr />
             </div>
 
-            <div className="flex flex-wrap justify-center w-3/5 mx-auto">
+            <div className="flex flex-wrap justify-center w-3/5 mx-auto gap-10">
                 {
                     stores.map((element: Store, index: number) => (
                         <motion.div className="card h-[21rem] w-[15rem] cursor-pointer"

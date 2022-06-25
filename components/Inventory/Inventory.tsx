@@ -176,7 +176,7 @@ function Inventory({ data }: any) {
                                             borderRadius: '5px'
                                         }}
                                     />
-                                    <h3 className="text-center mt-10">Price: {element.itemPrice}$</h3>
+                                    <h4 className="text-center mt-10">Price: ${element.itemPrice.toLocaleString(undefined, { minimumFractionDigits: 2 })}</h4>
                                     <h4 className="underline text-center">{element.itemQuantity} left</h4>
                                 </div>
                             </motion.div>
@@ -192,10 +192,8 @@ function Inventory({ data }: any) {
                     <Modal.Body>
                         <div className="p-5">
                             <div className="flex flex-row justify-evenly">
-                                <motion.div className="card p-2 w-[12rem] h-[17rem] cursor-pointer"
-                                    whileHover={{
-                                        scale: 1.1
-                                    }}>
+                                <motion.div className="p-2 w-[15rem] h-[17rem]"
+                                    >
                                     <div className="flex flex-col">
                                         <h5 className="text-center mb-1">{selectedItem.itemName}</h5>
                                         <div
@@ -209,8 +207,9 @@ function Inventory({ data }: any) {
                                                 borderRadius: '5px'
                                             }}
                                         />
-                                        <h3 className="text-center mt-10">Price: {selectedItem.itemPrice}$</h3>
+                                        <h4 className="text-center mt-10">Price: ${selectedItem.itemPrice.toLocaleString(undefined, { minimumFractionDigits: 2 })}</h4>
                                         <h4 className="underline text-center">{selectedItem.itemQuantity} left</h4>
+                                        <h4 className="text-center">{selectedItem.itemRarity} Rarity</h4>
                                     </div>
                                 </motion.div>
 
