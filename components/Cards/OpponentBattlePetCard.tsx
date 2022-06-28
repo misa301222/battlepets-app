@@ -50,12 +50,13 @@ function OpponentBattlePetCard({ opponentBattlePet }: Props) {
 
     return (
 
-        <div className="card w-[25rem] mx-auto">
+        <div className="card w-[25rem] h-[30rem] mx-auto">
             <div style={{
                 backgroundImage: `${opponentBattlePet.imageURL ? `url(${opponentBattlePet.imageURL})` : `url(${petType?.imageURL ? petType.imageURL : ''})`}`,
                 height: '10rem',
                 width: '10rem',
                 backgroundSize: 'cover',
+                backgroundPosition: 'center',
                 borderRadius: '1.3rem',
                 margin: '0 auto',
             }}

@@ -1,9 +1,9 @@
 import { NextPage } from "next";
 import { getSession } from "next-auth/react";
-import Dashboard from "../components/Dashboard/Dashboard";
+import ManageItems from "../../components/Manage/ManageItems";
 
-const DashboardPage: NextPage = ({ pets, currency }: any) => {
-    return (<Dashboard data={{ pets, currency }} />)
+const ManageItemsPage: NextPage = ({ items, stores }: any) => {
+    return <ManageItems data={{ items, stores }} />
 }
 
 export async function getServerSideProps(context: any) {
@@ -19,17 +19,16 @@ export async function getServerSideProps(context: any) {
 
     const { req } = context;
     const { cookie } = req.headers;
-    const { email }: any = session.user;
 
-    const [responsePets, responseCurrency] = await Promise.all([
-        fetch(`${process.env.NEXTAUTH_URL}/api/petAPI/${email}`, {
+    const [responseItems, responseStores] = await Promise.all([
+        fetch(`${process.env.NEXTAUTH_URL}/api/itemsAPI/`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
                 'Cookie': cookie
             },
         }),
-        fetch(`${process.env.NEXTAUTH_URL}/api/currencyAPI/getCurrencyByEmail/${email}`, {
+        fetch(`${process.env.NEXTAUTH_URL}/api/storesAPI`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -38,12 +37,12 @@ export async function getServerSideProps(context: any) {
         }),
     ]);
 
-    const [responseP, currencyR] = await Promise.all([
-        responsePets.json(),
-        responseCurrency.json()
-    ]);
+    const [itemsR, storesR] = await Promise.all([
+        responseItems.json(),
+        responseStores.json()
+    ])
 
-    return { props: { pets: responseP, currency: currencyR } }
+    return { props: { items: itemsR, stores: storesR } }
 }
 
-export default DashboardPage;
+export default ManageItemsPage;

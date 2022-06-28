@@ -9,15 +9,7 @@ const HomePage: NextPage = ({ petTypes }: any) => {
 }
 
 export async function getServerSideProps(context: any) {
-  const session = await getSession({ req: context.req });
-  if (!session) {
-    return {
-      redirect: {
-        destination: '/',
-        permanent: false,
-      },
-    };
-  }
+  // const session = await getSession({ req: context.req });
 
   const { req } = context;
   const { cookie } = req.headers;

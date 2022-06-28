@@ -75,6 +75,7 @@ function FightOpponent({ data }: any) {
     const [winner, setWinner] = useState<string>('');
     const [isDraw, setIsDraw] = useState<boolean>(false);
     const [isBattleFinished, setIsBattleFinished] = useState<boolean>(false);
+    const [wasExperienceGranted, setWasExperienceGranted] = useState<boolean>(true);
     const [battleLog, setBattleLog] = useState<BattleLog[]>([]);
     const router = useRouter();
 
@@ -89,7 +90,6 @@ function FightOpponent({ data }: any) {
     }
 
     const handleOnClickAction = async (action: string) => {
-        const multiplier: number = userPet.attackPoints! / 10 / 4 - (opponentPet.defensePoints! / 10 / 4) > 0 ? ((userPet.attackPoints! / 10 / 4) - (opponentPet.defensePoints! / 10 / 4)) * 0.1 : 0.3;
         const battleLogIndex: number = battleLog.length;
 
         const newOpponentPet: Pet = opponentPet;
@@ -99,8 +99,10 @@ function FightOpponent({ data }: any) {
 
         switch (action) {
             case 'Attack':
-                console.log(multiplier);
-                const damage: number = newUserPet.attackPoints! * multiplier
+                let damage: number = (newUserPet.attackPoints! - newOpponentPet.defensePoints!) / 5;
+                if (damage < 0) {
+                    damage = newUserPet.attackPoints! / 5;
+                }
                 newOpponentPet.currentHealthPoints! -= damage;
                 setOpponentPet(prev => ({ ...prev, currentHealthPoints: newOpponentPet.currentHealthPoints }));
 
@@ -145,8 +147,6 @@ function FightOpponent({ data }: any) {
 
     const opponentAction = async (newMessage: BattleLog) => {
         let maxNumber: number = 2;
-        const multiplier: number = opponentPet.attackPoints! / 10 / 4 - (userPet.defensePoints! / 10 / 4) > 0 ? (opponentPet.attackPoints! / 10 / 4 - (userPet.defensePoints! / 10 / 4)) * 0.1 : 0.3;
-
         const newOpponentPet: Pet = opponentPet;
         const newUserPet: Pet = userPet;
 
@@ -158,12 +158,14 @@ function FightOpponent({ data }: any) {
             maxNumber = 3;
         }
         let actionRandom: number = Math.floor(Math.random() * (maxNumber)) + 1;
-        // actionRandom = 2;
         let message: string = `${newOpponentPet.name} used `;
 
         switch (hashActions.get(actionRandom)) {
             case 'Attack':
-                const damage: number = newOpponentPet.attackPoints! * multiplier;
+                let damage: number = (newOpponentPet.attackPoints! - newUserPet.defensePoints!) / 5;
+                if (damage < 0) {
+                    damage = newOpponentPet.attackPoints! / 5;
+                }
 
                 newUserPet.currentHealthPoints! -= damage;
                 setUserPet(prev => ({ ...prev, currentHealthPoints: newUserPet.currentHealthPoints }));
@@ -204,6 +206,10 @@ function FightOpponent({ data }: any) {
                 setWinner(userPet._id);
                 //500 EXPERIENCE GRANTED
                 let experienceGranted: number = newOpponentPet.experienceGranted!;
+                if (newOpponentPet.level! + 30 < newUserPet.level!) {
+                    experienceGranted = 0;
+                    setWasExperienceGranted(false);
+                }
                 //experienceGranted = 50000;
                 const responseExperience = await updateExperienceAndLevel(userPet._id, experienceGranted, outcome);
                 setUpdatedPet(responseExperience);
@@ -296,7 +302,7 @@ function FightOpponent({ data }: any) {
                                 animate={{
                                     opacity: 1,
                                 }}
-                                className="">You Win {opponentPet.experienceGranted} experience!</motion.h2>
+                                className="">{wasExperienceGranted ? <span>You Win {opponentPet.experienceGranted} experience!</span> : <span>You didn't win any experience since your level is super high!</span>}</motion.h2>
                         </div>
 
                         {

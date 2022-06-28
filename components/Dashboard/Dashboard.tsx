@@ -1,10 +1,10 @@
 import { faDog, faHeartPulse, faHippo, faPaw, faPencilAlt, faRadiationAlt, faShieldCat, faStar } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { SyntheticEvent, useState } from "react";
 import PetCard from "../Cards/PetCard";
 import { motion } from 'framer-motion';
-import { Button, Modal } from 'react-daisyui'
+import { Modal } from 'react-daisyui'
 import PetCardFull from "../Cards/PetCardFull";
 import { useSession } from "next-auth/react";
 import Swal from "sweetalert2";
@@ -31,6 +31,11 @@ interface Pet {
     petType: string,
     position: number,
     experience: number
+}
+
+interface Currency {
+    userId: string,
+    currency: number
 }
 
 async function healAllPets(email: string) {
@@ -62,11 +67,11 @@ function Dashboard({ data }: any) {
     const { data: session, status } = useSession();
     const router = useRouter();
     const [pets, setPets] = useState<Pet[]>(data.pets as Pet[]);
+    const [currency, setCurrency] = useState<Currency>(data.currency as Currency);
     const [isOpen, setIsOpen] = useState<boolean>(false)
     const [selectedPet, setSelectedPet] = useState<Pet>();
 
     const handleOnClickOpenModal = (element: Pet) => {
-        console.log(element);
         setSelectedPet(element);
         setIsOpen(true);
     }
@@ -104,6 +109,10 @@ function Dashboard({ data }: any) {
                 <hr />
             </div>
 
+            <div className="mt-2 mb-10 w-2/3 mx-auto">
+                <h3 className="text-right underline">Current Money: ${currency.currency.toLocaleString(undefined, { minimumFractionDigits: 2 })}</h3>
+            </div>
+
             <motion.div
                 initial={{
                     opacity: 0,
@@ -126,7 +135,6 @@ function Dashboard({ data }: any) {
                         <button type="button" onClick={() => router.push('/')} className="btn-secondary"><FontAwesomeIcon icon={faHeartPulse} /> Adopt Pet</button>
                         <button type="button" onClick={() => router.push('/')} className="btn-tertiary"><FontAwesomeIcon icon={faRadiationAlt} /> Leave In Adoption</button>
                         <button type="button" onClick={() => router.push('/deletePet')} className="btn-danger"><FontAwesomeIcon icon={faRadiationAlt} /> Delete Pet</button>
-                        <button type='button' onClick={() => router.push(`/customizePets`)} className="btn-dark"><FontAwesomeIcon icon={faPencilAlt} /> Customize</button>
                     </div>
                 </div>
             </motion.div>
@@ -184,7 +192,9 @@ function Dashboard({ data }: any) {
                                     </div>
                                     <div className="w-1/2">
                                         <div className="p-5 h-1/2">
-                                            
+                                            <div className="flex flex-row justify-center">
+                                                <button type='button' onClick={() => router.push(`/customizePets`)} className="btn-dark"><FontAwesomeIcon icon={faPencilAlt} /> Customize</button>
+                                            </div>
                                         </div>
 
                                         <div className="p-5 h-1/2 w-full">
