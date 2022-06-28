@@ -1,4 +1,4 @@
-import { faMoneyBill1Wave, faQuestion } from "@fortawesome/free-solid-svg-icons";
+import { faMoneyBill, faMoneyBill1Wave, faQuestion } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { HTMLFactory, ReactHTML, useState } from "react";
 import Swal from "sweetalert2";
@@ -78,14 +78,39 @@ function Guess({ data }: any) {
 
             {
                 !playing ?
-                    <div className="card w-64 mx-auto">
-                        <h5 className="text-center mb-4">Quantity to Bet</h5>
-                        <input onChange={(e) => setBet(Number(e.target.value))} className="form-control text-center" type={'number'} />
-                        <button onClick={async () => handleOnClickStartGame()} className="btn-primary w-32 mx-auto mt-10" type="button"><FontAwesomeIcon icon={faMoneyBill1Wave} /> Bet</button>
+                    <div>
+                        <div className="container mx-auto card mb-20 flex flex-row">
+                            <div className="w-1/2">
+                                <img src={'/static/images/Reptil.jpg'} className='max-w-xl' />
+                            </div>
+                            <div className="w-1/3 mx-auto p-5">
+                                <h2 className="text-center">Hello!!!</h2>
+                                <h5 className="mt-10 text-center">Welcome to the guess game! This is simple, you only have to guess.<br /><br />
+                                    <span className="text-green-800">If you win your bet multiplies x10!</span><br />
+                                    <span className="text-red-800">If you lose i take all your money.</span><br />
+                                    You can play all you want, you can become millionaire.</h5>
+                                <h3 className="text-center mt-10"><FontAwesomeIcon icon={faMoneyBill} /></h3>
+                            </div>
+                        </div>
+                        <div className="card w-64 mx-auto">
+                            <h5 className="text-center mb-4">Quantity to Bet</h5>
+                            <input onChange={(e) => setBet(Number(e.target.value))} className="form-control text-center" type={'number'} />
+                            <button disabled={bet <= 0} onClick={async () => handleOnClickStartGame()} className="btn-primary w-32 mx-auto mt-10" type="button"><FontAwesomeIcon icon={faMoneyBill1Wave} /> Bet</button>
+                        </div>
                     </div>
                     :
                     <div>
-                        <div className="flex flex-wrap gap-20 w-1/4 mx-auto">
+                        <h4 className="text-center mb-10">There is something hidden... select one.</h4>
+                        <motion.div
+                            initial={{
+                                opacity: 0,
+                                translateX: -300
+                            }}
+                            animate={{
+                                opacity: 1,
+                                translateX: 0
+                            }}
+                            className="flex flex-wrap gap-20 w-1/4 mx-auto">
                             {[...Array(20)].map((element: any, index: number) => (
                                 <motion.div
                                     onClick={async () => handleOnClickSelectItem(index)}
@@ -94,7 +119,7 @@ function Guess({ data }: any) {
                                     <h5 className="text-center">{index}</h5>
                                 </motion.div>
                             ))}
-                        </div>
+                        </motion.div>
                     </div>
             }
         </div>

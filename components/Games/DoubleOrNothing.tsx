@@ -1,4 +1,4 @@
-import { faCoins, faHandHoldingDollar, faMoneyBill, faMoneyBill1Wave } from "@fortawesome/free-solid-svg-icons";
+import { faCat, faCoins, faHandHoldingDollar, faMoneyBill, faMoneyBill1Wave } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState } from "react";
 import Swal from "sweetalert2";
@@ -48,7 +48,14 @@ function DoubleOrNothing({ data }: any) {
         setMessage(response.message);
         setRound(response.round);
         if (!response.result) {
-            setPlaying(false);
+            Swal.fire({
+                position: 'center',
+                icon: 'warning',
+                title: 'You just lost your bet :(',
+                showConfirmButton: true,
+            }).then(() => {
+                setPlaying(false);
+            });
         }
     }
 
@@ -91,15 +98,47 @@ function DoubleOrNothing({ data }: any) {
             </div>
             {
                 !playing ?
-                    <div className="card w-64 mx-auto">
-                        <h5 className="text-center mb-4">Quantity to Bet</h5>
-                        <input onChange={(e) => setBet(Number(e.target.value))} className="form-control text-center" type={'number'} />
-                        <button onClick={async () => handleOnClickStartGame()} className="btn-primary w-32 mx-auto mt-10" type="button"><FontAwesomeIcon icon={faMoneyBill1Wave} /> Bet</button>
+                    <div className="">
+                        <div className="container mx-auto card mb-20 flex flex-row">
+                            <div className="w-1/2">
+                                <img src={'/static/images/CatDoubleOrNothing.jpg'} className='max-w-xl' />
+                            </div>
+                            <div className="w-1/3 mx-auto p-5">
+                                <h2 className="text-center">Hellou little one</h2>
+                                <h5 className="mt-10 text-center">The way this works is the next one, you bet a quantity, we roll a dice.<br /><br />
+                                    <span className="text-green-800">If you win your bet doubles and you can continue.</span><br />
+                                    <span className="text-red-800">If you lose i take all your money.</span><br />
+                                    You can play all you want, you can become millionaire.</h5>
+                                <h3 className="text-center mt-10">Take the risk?</h3>
+                            </div>
+                        </div>
+                        <h2 className="text-center mb-10">You can bet here meooow~ <FontAwesomeIcon icon={faCat} /></h2>
+                        <div className="card w-64 mx-auto">
+                            <h5 className="text-center mb-4">Quantity to Bet</h5>
+                            <input onChange={(e) => setBet(Number(e.target.value))} className="form-control text-center" type={'number'} />
+                            <button disabled={bet <= 0} onClick={async () => handleOnClickStartGame()} className="btn-primary w-32 mx-auto mt-10" type="button"><FontAwesomeIcon icon={faMoneyBill1Wave} /> Bet</button>
+                        </div>
                     </div>
                     :
-                    <div>
+                    <motion.div initial={{
+                        opacity: 0
+                    }}
+                        animate={{
+                            opacity: 1
+                        }}>
                         <h3 className="text-center">Flip #{round}</h3>
                         <motion.div
+                            initial={{
+                                opacity: 0,
+                                translateX: 100
+                            }}
+                            animate={{
+                                opacity: 1,
+                                translateX: 0,
+                                transition: {
+                                    delay: 0.5
+                                }
+                            }}
                             whileHover={{
                                 scale: 1.1
                             }} onClick={async () => handleOnClickFlip()} className="card w-40 mx-auto mt-20 cursor-pointer">
@@ -108,11 +147,23 @@ function DoubleOrNothing({ data }: any) {
                                 <h2 className="mt-2">Flip</h2>
                             </div>
                         </motion.div>
-                    </div>
+                    </motion.div>
             }
 
-            <div className="mt-10">
-                <h2 className="text-center">{message}</h2>
+            <motion.div
+                initial={{
+                    opacity: 0,
+                    translateX: 100
+                }}
+                animate={{
+                    opacity: 1,
+                    translateX: 0,
+                    transition: {
+                        delay: 0.5
+                    }
+                }}
+                className="mt-10">
+                <motion.h2 className="text-center">{message}</motion.h2>
                 {
                     round > 1 ?
                         <motion.div
@@ -126,9 +177,7 @@ function DoubleOrNothing({ data }: any) {
                         </motion.div>
                         : null
                 }
-            </div>
-
-
+            </motion.div>
         </div>
     )
 }

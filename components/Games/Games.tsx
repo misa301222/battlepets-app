@@ -33,6 +33,16 @@ function Games() {
                     <FontAwesomeIcon icon={faQuestion} className='text-[5rem]' />
                     <h5 className="mt-5">Guess</h5>
                 </motion.div>
+
+                <motion.div
+                    whileHover={{
+                        scale: 1.1
+                    }}
+                    onClick={() => router.push('/games/levelChanger')}
+                    className="card text-center cursor-pointer w-[12rem]">
+                    <FontAwesomeIcon icon={faQuestion} className='text-[5rem]' />
+                    <h5 className="mt-5">Level Changer...</h5>
+                </motion.div>
             </div>
         </div>
     )
