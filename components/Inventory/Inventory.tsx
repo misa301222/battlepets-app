@@ -41,6 +41,19 @@ interface Pet {
     experienceGranted?: number
 }
 
+async function magicPet(id: string, quantity: number) {
+    const response = await fetch(`/api/petAPI/magicPet/`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ id, quantity })
+    });
+
+    const data = await response.json();
+    return data;
+}
+
 async function removeQuantity(quantity: number, itemId: string) {
     const response = await fetch(`/api/itemsAPI/removeItemFromUser/`, {
         method: 'PUT',
@@ -117,7 +130,6 @@ function Inventory({ data }: any) {
             return;
         }
 
-        //do the sum to hp here
         const quantity: number = selectedItem.itemRarity;
         const response = await removeQuantity(1, selectedItem._id);
         if (!response.isOk) {
@@ -129,18 +141,39 @@ function Inventory({ data }: any) {
             });
             return;
         }
-        const responseHeal = await healPet(action, quantity);
-        if (responseHeal.isOk) {
-            setIsOpen(false);
-            Swal.fire({
-                position: 'center',
-                icon: 'success',
-                title: `Pet healed ${quantity} HP!`,
-                showConfirmButton: true
-            }).then(async () => {
-                const responseItems = await getItemsByEmail(session!.user?.email!);
-                setItems(responseItems);
-            });
+
+        switch (selectedItem.itemType) {
+            case 'FOOD':
+                const responseHeal = await healPet(action, quantity);
+                if (responseHeal.isOk) {
+                    setIsOpen(false);
+                    Swal.fire({
+                        position: 'center',
+                        icon: 'success',
+                        title: `Pet healed ${quantity} HP!`,
+                        showConfirmButton: true
+                    }).then(async () => {
+                        const responseItems = await getItemsByEmail(session!.user?.email!);
+                        setItems(responseItems);
+                    });
+                }
+                break;
+
+            case 'POTION':
+                const responseMagic = await magicPet(action, quantity);
+                if (responseMagic.isOk) {
+                    setIsOpen(false);
+                    Swal.fire({
+                        position: 'center',
+                        icon: 'success',
+                        title: `Pet recovered ${quantity} MP!`,
+                        showConfirmButton: true
+                    }).then(async () => {
+                        const responseItems = await getItemsByEmail(session!.user?.email!);
+                        setItems(responseItems);
+                    });
+                }
+                break;
         }
     }
 
@@ -193,7 +226,7 @@ function Inventory({ data }: any) {
                         <div className="p-5">
                             <div className="flex flex-row justify-evenly">
                                 <motion.div className="p-2 w-[15rem] h-[17rem]"
-                                    >
+                                >
                                     <div className="flex flex-col">
                                         <h5 className="text-center mb-1">{selectedItem.itemName}</h5>
                                         <div
