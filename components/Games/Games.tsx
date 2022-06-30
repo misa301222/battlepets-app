@@ -1,4 +1,4 @@
-import { faDice, faGamepad, faQuestion } from "@fortawesome/free-solid-svg-icons";
+import { faCalculator, faDice, faGamepad, faQuestion } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { motion } from 'framer-motion';
 import { useRouter } from "next/router";
@@ -42,6 +42,16 @@ function Games() {
                     className="card text-center cursor-pointer w-[12rem]">
                     <FontAwesomeIcon icon={faQuestion} className='text-[5rem]' />
                     <h5 className="mt-5">Level Changer...</h5>
+                </motion.div>
+
+                <motion.div
+                    whileHover={{
+                        scale: 1.1
+                    }}
+                    onClick={() => router.push('/games/mathGame')}
+                    className="card text-center cursor-pointer w-[12rem]">
+                    <FontAwesomeIcon icon={faCalculator} className='text-[5rem]' />
+                    <h5 className="mt-5">Math Game!</h5>
                 </motion.div>
             </div>
         </div>
