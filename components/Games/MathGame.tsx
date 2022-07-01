@@ -1,6 +1,21 @@
 import { faCalculator } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { SyntheticEvent, useState } from "react";
+import React, { SyntheticEvent, useState } from "react";
+import Swal from "sweetalert2";
+import { motion } from 'framer-motion';
+
+async function proccessPayment(quantity: number, type: string) {
+    const response = await fetch(`/api/currencyAPI/addRemoveCurrencyByEmail`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ quantity, type })
+    });
+
+    const data = await response.json();
+    return data;
+}
 
 function MathGame() {
     const [answer, setAnswer] = useState<number>();
@@ -107,11 +122,30 @@ function MathGame() {
     }
 
     const handleOnClickStopPlaying = async () => {
-        setIsPlaying(false);
-        setLevel(1);
-        setPoints(0);
-        setNextLevelPage(false);
-        setIsRight(true);
+        const type: string = 'ADD';
+        if (points > 0) {
+            const response = await proccessPayment(points, type);
+            if (response.isOk) {
+                Swal.fire({
+                    position: 'center',
+                    icon: 'success',
+                    title: `You win $${points}!`,
+                    showConfirmButton: true,
+                }).then(() => {
+                    setIsPlaying(false);
+                    setLevel(1);
+                    setPoints(0);
+                    setNextLevelPage(false);
+                    setIsRight(true);
+                });
+            }
+        } else {
+            setIsPlaying(false);
+            setLevel(1);
+            setPoints(0);
+            setNextLevelPage(false);
+            setIsRight(true);
+        }
     }
 
     return (
@@ -121,29 +155,70 @@ function MathGame() {
                 <hr />
             </div>
 
+            {
+                !isPlaying ?
+                    <div>
+                        <motion.div
+                            initial={{
+                                opacity: 0,
+                                translateX: -400
+                            }}
+
+                            animate={{
+                                opacity: 1,
+                                translateX: 0,
+                                transition: {
+                                    type: 'spring',
+                                    duration: 1.4
+                                }
+                            }}
+                            className="container mx-auto card mb-20 flex flex-row">
+                            <div className="w-1/2 flex flex-row items-center">
+                                <img src={'/static/images/Math.png'} className='max-w-xl max-h-[20rem] mx-auto' />
+                            </div>
+                            <div className="w-1/3 mx-auto p-5">
+                                <h2 className="text-center">This is the Math Game!</h2>
+                                <h5 className="mt-10 text-center">Maths are fun! You'll see.<br /><br />
+                                    How to play?<br />
+                                    I'll ask you some operations, it can be addition, substraction, or multiplication.<br />
+                                    <span className="text-blue-600">If you get the answer fast you get more points.</span><br />
+                                    <span className="underline">But after level 10, things get more complicated.</span></h5>
+                                <h3 className="text-center mt-10">The more points you win, better the price.</h3>
+                            </div>
+                        </motion.div>
+                    </div>
+                    : null
+            }
+
             <div className="container mx-auto p-5 mb-10 mt-10">
                 <h3 className="text-center">Level {level}</h3>
             </div>
             {
                 isPlaying ?
                     !nextLevelPage ?
-                        <form onSubmit={handleOnSubmitAnswerForm} className="card w-1/2 mx-auto">
-                            <div className="flex flex-row justify-center gap-5 items-baseline">
-                                <div>
-                                    <h5 className="">{firstNumber} {operation} {secondNumber} =</h5>
-                                </div>
-                                <div className="">
-                                    <input type={'number'} onChange={(e) => setAnswer(Number(e.target.value))} className="form-control text-center" />
-                                </div>
+                        <div>
+                            <form onSubmit={handleOnSubmitAnswerForm} className="card w-1/2 mx-auto">
+                                <div className="flex flex-row justify-center gap-5 items-baseline">
+                                    <div>
+                                        <h5 className="">{firstNumber} {operation} {secondNumber} =</h5>
+                                    </div>
+                                    <div className="">
+                                        <input autoFocus type={'number'} onChange={(e) => setAnswer(Number(e.target.value))} className="form-control text-center" autoComplete="off" />
+                                    </div>
 
-                                <div className="">
-                                    <button type="submit" className="btn-dark">Accept</button>
+                                    <div className="">
+                                        <button type="submit" className="btn-dark">Accept</button>
+                                    </div>
                                 </div>
+                                <div className="flex flex-row justify-center gap-5 items-baseline mt-10">
+                                    {!isRight ? <h5 className="text-red-800">Answer is Wrong! Try again quick</h5> : <div></div>}
+                                </div>
+                            </form>
+
+                            <div className="flex flex-row justify-center mt-20">
+                                <button onClick={async () => handleOnClickStopPlaying()} type="button" className="w-40 btn-danger">Quit</button>
                             </div>
-                            <div className="flex flex-row justify-center gap-5 items-baseline mt-10">
-                                {!isRight ? <h5 className="text-red-800">Answer is Wrong! Try again quick</h5> : <div></div>}
-                            </div>
-                        </form>
+                        </div>
                         :
                         <div>
                             <h3 className="text-center mb-10">You answered in: {totalTime.toFixed(2)} seconds!</h3>
@@ -158,7 +233,7 @@ function MathGame() {
                         </div>
                     :
                     <div className="flex flex-row justify-center">
-                        <button onClick={() => handleOnClickStartGame()} type="button" className="btn-primary">Start</button>
+                        <button onClick={() => handleOnClickStartGame()} type="button" className="btn-primary w-40">Start</button>
                     </div>
             }
 

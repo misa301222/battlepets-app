@@ -48,16 +48,18 @@ function LevelChanger({ data }: any) {
     const [pets] = useState<Pet[]>(data.pets as Pet[]);
     const [selectedPet, setSelectedPet] = useState<Pet>(pets[0]);
     const [selectedQuantity, setSelectedQuantity] = useState<number>(10000);
+    const [message, setMessage] = useState<string>('');
     const router = useRouter();
 
     const handleOnClickRollDice = () => {
-        //const result: boolean = Math.random() < 0.001;
-        const result: boolean = Math.random() < 0.9;
+        const resultNumber: number = Math.random();
+        const result: boolean = resultNumber < 0.001;
+        
         if (result) {
-            console.log('success');
             setSuccess(true);
+            setMessage(`You win!, you got ${resultNumber.toFixed(3)}`);
         } else {
-            console.log('nothing');
+            setMessage(`Not even close, you got ${resultNumber.toFixed(3)}, roll the dice again?`);
         }
     }
 
@@ -93,16 +95,56 @@ function LevelChanger({ data }: any) {
 
             {
                 !success ?
-                    <motion.div
-                        className="card w-fit mx-auto cursor-pointer"
-                        whileHover={{
-                            scale: 1.1
-                        }}
-                        onClick={() => handleOnClickRollDice()}>
-                        <FontAwesomeIcon className="text-[8rem]" icon={faDiceOne} />
-                    </motion.div>
+                    <div>
+                        <motion.div
+                            initial={{
+                                opacity: 0,
+                                translateX: -400
+                            }}
+
+                            animate={{
+                                opacity: 1,
+                                translateX: 0,
+                                transition: {
+                                    type: 'spring',
+                                    duration: 1.4
+                                }
+                            }}
+                            className="container mx-auto card mb-20 flex flex-row">
+                            <div className="w-1/2 flex flex-row items-center">
+                                <img src={'/static/images/GreyCat.jpg'} className='max-w-xl' />
+                            </div>
+                            <div className="w-1/3 mx-auto p-5">
+                                <h2 className="text-center">Level Changer</h2>
+                                <h5 className="mt-10 text-center">Roll the dice and win, but this is no ordinary dice, almost all the odds are against you.<br />
+                                    0.001% to win. 24 hours a day.<br />
+                                </h5>
+                                <h3 className="text-center mt-10">Will you take the callenge? </h3>
+                            </div>
+                        </motion.div>
+                    </div>
+                    : null
+            }
+
+            {
+                !success ?
+                    <div>
+                        <motion.div
+                            className="card w-fit mx-auto cursor-pointer"
+                            whileHover={{
+                                scale: 1.1
+                            }}
+                            onClick={() => handleOnClickRollDice()}>
+                            <FontAwesomeIcon className="text-[8rem]" icon={faDiceOne} />
+                        </motion.div>
+
+                        <div className="mt-10">
+                            <h3 className="text-center">{message}</h3>
+                        </div>
+                    </div>
                     :
                     <div>
+                        <h2 className="text-center">{message}</h2>
                         <h4 className="text-center mb-10">It seems you won.. Select the levels you want to increase.</h4>
                         <div className="flex flex-row justify-center mb-20">
                             <PetCardFull pet={selectedPet} />
