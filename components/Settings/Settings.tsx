@@ -1,4 +1,4 @@
-import { faBook, faCogs, faDove, faStore, faUserEdit, faUserNinja } from "@fortawesome/free-solid-svg-icons";
+import { faBook, faCogs, faDove, faPersonFallingBurst, faStore, faUserEdit, faUserNinja } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { motion } from 'framer-motion';
 import { useSession } from "next-auth/react";
@@ -73,6 +73,16 @@ function Settings() {
                                 className="card text-center cursor-pointer">
                                 <FontAwesomeIcon icon={faBook} className='text-[5rem]' />
                                 <h5 className="mt-5">Manage Items</h5>
+                            </motion.div>
+
+                            <motion.div
+                                whileHover={{
+                                    scale: 1.1
+                                }}
+                                onClick={() => router.push('/manage/manageCliffHangerPhrases')}
+                                className="card text-center cursor-pointer">
+                                <FontAwesomeIcon icon={faPersonFallingBurst} className='text-[5rem]' />
+                                <h5 className="mt-5">Manage CliffHanger Phrases</h5>
                             </motion.div>
                         </div>
                     </div>
